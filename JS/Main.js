@@ -1,11 +1,28 @@
 // Contenu du fichier: matrice 31x31, lancer Webgl, charger images/ sons, creer la scène 3D, appeler les fonctions de dessin, démarrer le jeu, générer la loop principale
+var gl = null;
+var prog = null;
+var objPlancher = null;
+var matProjection = null;
+
 function demarrer() {
   var canvas = document.getElementById("monCanvas");
-  var gl = initWebGL(canvas);
+  gl = initWebGL(canvas);
+  prog = initShaders(gl);
 
-  var prog = initShaders(gl);
+  gl.clearColor(0.0, 0.0, 0.0, 1.0);
+  gl.enable(gl.DEPTH_TEST);
+  gl.viewport(0, 0, canvas.width, canvas.height);
 
-  // À compléter ensuite
+  matProjection = mat4.create();
+  mat4.perspective(45, canvas.width / canvas.height, 0.1, 100.0, matProjection);
+  gl.uniformMatrix4fv(prog.matProjection, false, matProjection);
+
+  initialiserCamera();
+  gererClavierCamera();
+
+  objPlancher = creerPlancher(gl);
+
+  requestAnimationFrame(bouclePrincipale);
 }
 
 // array 31x31 qui represente la carte de murs, vides, murs ouvrables et salle de spawn
@@ -52,3 +69,13 @@ var tabCarte = [
   ["M", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "M"],
   ["M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M"],
 ];
+
+function bouclePrincipale() {
+  mettreAJourCamera();
+
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  dessinerObjet(gl, prog, objPlancher);
+
+  requestAnimationFrame(bouclePrincipale);
+}
