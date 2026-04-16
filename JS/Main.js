@@ -2,6 +2,7 @@
 var gl = null;
 var prog = null;
 var objPlancher = null;
+var objPilier = null;
 var matProjection = null;
 
 function demarrer() {
@@ -21,6 +22,7 @@ function demarrer() {
   gererClavierCamera();
 
   objPlancher = creerPlancher(gl);
+  objPilier = creerPilier(gl, 0, 0.0, 15.0, 1.0, 15.0);
 
   requestAnimationFrame(bouclePrincipale);
 }
@@ -76,6 +78,7 @@ function bouclePrincipale() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   dessinerObjet(gl, prog, objPlancher);
+  dessinerObjet(gl, prog, objPilier);
 
   requestAnimationFrame(bouclePrincipale);
 }
