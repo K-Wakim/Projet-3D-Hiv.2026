@@ -7,21 +7,38 @@
       Thesaurus par Abel Aimé Moussy Minyogok, Kamal Wakim et Samuel
       Filteau-Hubert
     </title>
+
     <link rel="stylesheet" type="text/css" href="StyleThesaurus.css" />
 
-    <script type="text/javascript"></script>
+    <!-- Librairies -->
+    <script src="JS/WebGL.js"></script>
+    <script src="JS/Transformations.js"></script>
+    <script src="JS/ShaderCouleursTextures.js"></script>
+    <script src="JS/glMatrix-0.9.5.min.js"></script>
+    <script src="JS/Camera.js"></script>
+
+    <!-- Ton code -->
+    <script src="JS/Main.js"></script>
+    <script src="JS/Objets.js"></script>
+    <script src="JS/CameraControle.js"></script>
+    <script src="JS/GameLogic.js"></script>
+    <script src="JS/Hud.js"></script>
   </head>
-  <body>
+
+  <body onload="demarrer();">
     <header class="sTexteCentre sLargeurDiv sEntete">
       <p>
         <span class="sTitreApp"> Thesaurus<br /> </span> par
         <span class="sAuteurApp">
-          Abel Aimé Moussy Minyogok, Kamal Wakim et Samuel Filteau-Hubert
+          Abel Aimé Moussy Minyogok, Kamal Wakim et Samuel
+          Filteau-Hubert
         </span>
       </p>
     </header>
-    <canvas id="canvas" width="800" height="600"
-      >Votre navigateur ne supporte pas la balise canvas</canvas
-    >
+
+    <!-- Canvas -->
+    <canvas id="monCanvas" width="800" height="600">
+      Votre navigateur ne supporte pas la balise canvas
+    </canvas>
   </body>
 </html>
