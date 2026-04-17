@@ -2,8 +2,8 @@
 var gl = null;
 var prog = null;
 var objPlancher = null;
-var objPilier = null;
 var matProjection = null;
+var tabMursOuvrables = [];
 
 function demarrer() {
   var canvas = document.getElementById("monCanvas");
@@ -22,7 +22,16 @@ function demarrer() {
   gererClavierCamera();
 
   objPlancher = creerPlancher(gl);
-  objPilier = creerPilier(gl, 0, 0.0, 15.0, 1.0, 15.0);
+
+  tabMursOuvrables = [];
+
+  for (var z = 0; z < tabCarte.length; z++) {
+    for (var x = 0; x < tabCarte[z].length; x++) {
+      if (tabCarte[z][x] === "O") {
+        tabMursOuvrables.push(creerMurOuvrable(gl, 0, 0.0, x + 0.5, 0.5, z + 0.5));
+      }
+    }
+  }
 
   requestAnimationFrame(bouclePrincipale);
 }
@@ -78,7 +87,10 @@ function bouclePrincipale() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   dessinerObjet(gl, prog, objPlancher);
-  dessinerObjet(gl, prog, objPilier);
+
+  for (var i = 0; i < tabMursOuvrables.length; i++) {
+    dessinerObjet(gl, prog, tabMursOuvrables[i]);
+  }
 
   requestAnimationFrame(bouclePrincipale);
 }
