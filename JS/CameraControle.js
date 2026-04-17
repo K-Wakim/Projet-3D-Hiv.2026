@@ -6,8 +6,8 @@ var tgtCam = [15.5, 0.6, 14.5]; // regarde vers le nord
 var upCam = [0, 1, 0];
 
 var angleCamera = -Math.PI / 2; // nord si on utilise cos/sin comme ci-dessous
-var vitesseCamera = 0.08;
-var vitesseRotation = 0.06;
+var vitesseCamera = 0.03;
+var vitesseRotation = 0.03;
 
 var touches = {};
 
@@ -78,6 +78,11 @@ function mettreAJourCamera() {
     posCam[2] = nouveauZ;
   }
 
+  var col = Math.floor(posCam[0]);
+  var lig = Math.floor(posCam[2]);
+
+  console.log(`Camera → X: ${col} | Z: ${lig}`);
+
   mettreAJourCibleCamera();
   synchroniserCamera();
 }
@@ -92,7 +97,9 @@ function collisionMur(x, z) {
 
   var caseCarte = tabCarte[lig][col];
 
-  return caseCarte === "M" || caseCarte === "O" || caseCarte === "X";
+  // return caseCarte === "M" || caseCarte === "O" || caseCarte === "X";
+  return caseCarte === "M" || caseCarte === "O";
+  return false;
 }
 
 function obtenirMatriceVue() {
