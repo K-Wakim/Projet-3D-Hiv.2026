@@ -68,3 +68,92 @@ function verifierTeleportation() {
     }
   }
 }
+
+function initialiserControlesJeu() {
+  document.addEventListener("keydown", function (e) {
+    if (e.code === "Space" && !e.repeat) {
+      tenterOuvrirMurDevantCamera();
+    }
+  });
+}
+
+function getCasesDevantCamera() {
+  var caseX = Math.floor(posCam[0]);
+  var caseZ = Math.floor(posCam[2]);
+
+  var dx = Math.cos(angleCamera);
+  var dz = Math.sin(angleCamera);
+
+  var sx = 0;
+  var sz = 0;
+
+  if (dx > 0.2) sx = 1;
+  else if (dx < -0.2) sx = -1;
+
+  if (dz > 0.2) sz = 1;
+  else if (dz < -0.2) sz = -1;
+
+  var cases = [];
+
+  // devant principal
+  if (sx !== 0 || sz !== 0) {
+    cases.push({ x: caseX + sx, z: caseZ + sz });
+  }
+
+  // si diagonale, essayer aussi les deux voisines
+  if (sx !== 0 && sz !== 0) {
+    cases.push({ x: caseX + sx, z: caseZ });
+    cases.push({ x: caseX, z: caseZ + sz });
+  }
+
+  return cases;
+}
+
+function tenterOuvrirMurDevantCamera() {
+  var casesDevant = getCasesDevantCamera();
+
+  for (var c = 0; c < casesDevant.length; c++) {
+    var x = casesDevant[c].x;
+    var z = casesDevant[c].z;
+
+    if (z < 0 || z >= tabCarte.length || x < 0 || x >= tabCarte[0].length) {
+      continue;
+    }
+
+    if (tabCarte[z][x] !== "O") {
+      continue;
+    }
+
+    for (var i = 0; i < tabMursOuvrables.length; i++) {
+      var mur = tabMursOuvrables[i];
+
+      if (mur.caseX === x && mur.caseZ === z && !mur.binEnOuverture && !mur.binOuvert) {
+        mur.binEnOuverture = true;
+        console.log("Ouverture du mur :", x, z);
+        return;
+      }
+    }
+  }
+}
+
+function animerMursOuvrables() {
+  for (var i = 0; i < tabMursOuvrables.length; i++) {
+    var mur = tabMursOuvrables[i];
+
+    if (mur.binEnOuverture) {
+      var y = getPositionY(mur.transformations);
+      y -= 0.03;
+
+      if (y <= -0.99) {
+        y = -0.99;
+        mur.binEnOuverture = false;
+        mur.binOuvert = true;
+
+        // le mur devient traversable
+        tabCarte[mur.caseZ][mur.caseX] = "_";
+      }
+
+      setPositionY(y, mur.transformations);
+    }
+  }
+}

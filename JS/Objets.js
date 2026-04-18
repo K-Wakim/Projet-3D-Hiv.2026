@@ -197,7 +197,7 @@ function creerMurOuvrable(gl, noTexture, pcTexture, x, y, z) {
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tabSommets), gl.STATIC_DRAW);
 
   var c1 = [0.0, 0.6, 0.6, 1.0];
-  var c2 = [0.8, 0.8, 0.8, 1.0];
+  var c2 = [0.0, 0.6, 0.6, 1.0];
   var c3 = [0.4, 0.4, 0.4, 1.0];
 
   var tabCouleurs = [];

@@ -30,6 +30,7 @@ function demarrer() {
 
   initialiserCamera();
   gererClavierCamera();
+  initialiserControlesJeu();
 
   objPlancher = creerPlancher(gl);
   objCiel = creerCiel(gl);
@@ -48,7 +49,12 @@ function demarrer() {
     for (var x = 0; x < tabCarte[z].length; x++) {
 
       if (tabCarte[z][x] === "O") {
-        tabMursOuvrables.push(creerMurOuvrable(gl, 0, 0.0, x + 0.5, 0.5, z + 0.5));
+        var mur = creerMurOuvrable(gl, 0, 0.0, x + 0.5, 0.5, z + 0.5);
+        mur.caseX = x;
+        mur.caseZ = z;
+        mur.binEnOuverture = false;
+        mur.binOuvert = false;
+        tabMursOuvrables.push(mur);
       }
 
       if (tabCarte[z][x] === "M") {
@@ -173,7 +179,8 @@ function bouclePrincipale() {
 
   verifierCollisionCoffre();
   verifierTeleportation();
-  
+  animerMursOuvrables();
+
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   dessinerObjet(gl, prog, objPlancher);
