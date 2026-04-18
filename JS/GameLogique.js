@@ -209,6 +209,70 @@ function animerPortesSpawn() {
   }
 }
 
+function getCasesLibres() {
+  var casesLibres = [];
+
+  for (var z = 0; z < tabCarte.length; z++) {
+    for (var x = 0; x < tabCarte[z].length; x++) {
+      if (tabCarte[z][x] === "_") {
+        casesLibres.push({ x: x, z: z });
+      }
+    }
+  }
+
+  return casesLibres;
+}
+
+function tirerCase(casesLibres) {
+  var index = Math.floor(Math.random() * casesLibres.length);
+  return casesLibres.splice(index, 1)[0];
+}
+
+function placerObjetsAleatoires() {
+  var casesLibres = getCasesLibres();
+
+  // Coffre
+  var pos = tirerCase(casesLibres);
+  objCoffre = creerCoffre(gl, pos.x + 0.5, 0.45, pos.z + 0.5);
+  console.log("Coffre →", pos.x, pos.z);
+
+  var coffreCaseX = pos.x;
+  var coffreCaseZ = pos.z;
+
+  // 3 téléporteurs
+  for (var i = 0; i < 3; i++) {
+    pos = tirerCase(casesLibres);
+    console.log("TeleTransporteur", i, "→", pos.x, pos.z);
+
+    tabTeleporteurs.push(
+      creerTeleTransporteur(gl, pos.x + 0.5, 1.0, pos.z + 0.5)
+    );
+  }
+
+  // 3 receveurs
+  for (var i = 0; i < 3; i++) {
+    pos = tirerCase(casesLibres);
+    console.log("TeleReceveur", i, "→", pos.x, pos.z);
+
+    tabReceveurs.push(
+      creerTeleReceveur(gl, pos.x + 0.5, 1.0, pos.z + 0.5)
+    );
+  }
+
+  // 10 flèches
+  for (var i = 0; i < 10; i++) {
+    pos = tirerCase(casesLibres);
+
+    var angleFleche = getAngleVersCoffre(pos.x, pos.z, coffreCaseX, coffreCaseZ);
+
+    tabFleches.push(
+      creerFleche(gl, pos.x + 0.5, 1.3, pos.z + 0.5, angleFleche)
+    );
+
+    console.log("Fleche", i, "→", pos.x, pos.z, "| angle:", angleFleche.toFixed(2));
+  }
+}
+
 function getAngleVersCoffre(caseX, caseZ, coffreX, coffreZ) {
   var dx = coffreX - caseX;
   var dz = coffreZ - caseZ;
