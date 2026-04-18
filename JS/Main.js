@@ -171,6 +171,9 @@ var tabCarte = [
 function bouclePrincipale() {
   mettreAJourCamera();
 
+  verifierCollisionCoffre();
+  verifierTeleportation();
+  
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   dessinerObjet(gl, prog, objPlancher);

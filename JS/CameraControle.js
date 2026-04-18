@@ -87,21 +87,6 @@ function mettreAJourCamera() {
   synchroniserCamera();
 }
 
-function collisionMur(x, z) {
-  var col = Math.floor(x);
-  var lig = Math.floor(z);
-
-  if (lig < 0 || lig >= tabCarte.length || col < 0 || col >= tabCarte[0].length) {
-    return true;
-  }
-
-  var caseCarte = tabCarte[lig][col];
-
-  // return caseCarte === "M" || caseCarte === "O" || caseCarte === "X";
-  return caseCarte === "M" || caseCarte === "O";
-  return false;
-}
-
 function obtenirMatriceVue() {
   var matVue = mat4.create();
   mat4.lookAt(posCam, tgtCam, upCam, matVue);
