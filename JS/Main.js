@@ -5,6 +5,7 @@ var matProjection = null;
 
 // Objets
 var objPlancher = null;
+var objCiel = null;
 var objCoffre = null;
 var tabSolsSpawn = [];
 var tabMursOuvrables = [];
@@ -31,6 +32,7 @@ function demarrer() {
   gererClavierCamera();
 
   objPlancher = creerPlancher(gl);
+  objCiel = creerCiel(gl);
 
   // RESET tableaux
   tabMursOuvrables = [];
@@ -172,6 +174,7 @@ function bouclePrincipale() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   dessinerObjet(gl, prog, objPlancher);
+  dessinerObjet(gl, prog, objCiel);
 
   for (var i = 0; i < tabMursOuvrables.length; i++) {
     dessinerObjet(gl, prog, tabMursOuvrables[i]);

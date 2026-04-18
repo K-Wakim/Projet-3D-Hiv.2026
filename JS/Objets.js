@@ -89,6 +89,64 @@ function creerSolSpawn(objgl, x, z) {
   return solSpawn;
 }
 
+function creerCiel(objgl) {
+  var ciel = {};
+
+  var tabSommets = [
+    0.0, 0.0, 0.0,
+    31.0, 0.0, 0.0,
+    31.0, 0.0, 31.0,
+    0.0, 0.0, 31.0
+  ];
+
+  ciel.vertex = objgl.createBuffer();
+  objgl.bindBuffer(objgl.ARRAY_BUFFER, ciel.vertex);
+  objgl.bufferData(objgl.ARRAY_BUFFER, new Float32Array(tabSommets), objgl.STATIC_DRAW);
+
+  // 🔵 couleur ciel
+  var tabCouleurs = [
+    0.5, 0.7, 1.0, 1.0,
+    0.5, 0.7, 1.0, 1.0,
+    0.5, 0.7, 1.0, 1.0,
+    0.5, 0.7, 1.0, 1.0
+  ];
+
+  ciel.couleurs = objgl.createBuffer();
+  objgl.bindBuffer(objgl.ARRAY_BUFFER, ciel.couleurs);
+  objgl.bufferData(objgl.ARRAY_BUFFER, new Float32Array(tabCouleurs), objgl.STATIC_DRAW);
+
+  var tabTexels = [
+    0.0, 0.0,
+    0.0, 0.0,
+    0.0, 0.0,
+    0.0, 0.0
+  ];
+
+  ciel.texels = objgl.createBuffer();
+  objgl.bindBuffer(objgl.ARRAY_BUFFER, ciel.texels);
+  objgl.bufferData(objgl.ARRAY_BUFFER, new Float32Array(tabTexels), objgl.STATIC_DRAW);
+
+  ciel.texels.intNoTexture = 0;
+  ciel.texels.pcCouleurTexel = 0.0;
+
+  var tabIndices = [
+    0, 2, 1,   // inversé pour être visible d’en dessous
+    0, 3, 2
+  ];
+
+  ciel.maillage = objgl.createBuffer();
+  objgl.bindBuffer(objgl.ELEMENT_ARRAY_BUFFER, ciel.maillage);
+  objgl.bufferData(objgl.ELEMENT_ARRAY_BUFFER, new Uint16Array(tabIndices), objgl.STATIC_DRAW);
+  ciel.maillage.intNbTriangles = 2;
+
+  ciel.transformations = creerTransformations();
+
+  // 🔥 hauteur au-dessus des murs
+  ciel.transformations[1] = 1.5;
+
+  return ciel;
+}
+
 function creerMurOuvrable(gl, noTexture, pcTexture, x, y, z) {
   var murOuvrable = {};
 
