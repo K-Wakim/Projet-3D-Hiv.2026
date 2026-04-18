@@ -694,12 +694,6 @@ function creerFleche(gl, x, y, z, angleY) {
   return fleche;
 }
 
-function getAngleVersCoffre(caseX, caseZ, coffreX, coffreZ) {
-  var dx = coffreX - caseX;
-  var dz = coffreZ - caseZ;
-  return Math.atan2(dx, dz) * 180 / Math.PI;
-}
-
 function dessinerObjet(objgl, objProgShaders, obj) {
   var matModeleVue = obtenirMatriceVue();
 

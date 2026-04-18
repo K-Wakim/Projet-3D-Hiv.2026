@@ -9,7 +9,7 @@ function collisionMur(x, z) {
 
   var caseCarte = tabCarte[lig][col];
 
-  return caseCarte === "M" || caseCarte === "O";
+  return caseCarte === "M" || caseCarte === "O" || caseCarte === "X";
 }
 
 function verifierCollisionCoffre() {
@@ -156,4 +156,61 @@ function animerMursOuvrables() {
       setPositionY(y, mur.transformations);
     }
   }
+}
+
+function verifierSortieSpawn() {
+  var caseX = Math.floor(posCam[0]);
+  var caseZ = Math.floor(posCam[2]);
+
+  if (caseX === 15 && caseZ === 12) {
+    for (var i = 0; i < tabPortesSpawn.length; i++) {
+      var porte = tabPortesSpawn[i];
+
+      if (!porte.binEnFermeture && !porte.binFermee) {
+        porte.binEnFermeture = true;
+        console.log("Fermeture de la porte du spawn");
+      }
+    }
+  }
+}
+
+function joueurEstEncoreDansSpawn() {
+  var caseX = Math.floor(posCam[0]);
+  var caseZ = Math.floor(posCam[2]);
+
+  if (caseZ < 0 || caseZ >= tabCarte.length || caseX < 0 || caseX >= tabCarte[0].length) {
+    return false;
+  }
+
+  return tabCarte[caseZ][caseX] === "S";
+}
+
+function animerPortesSpawn() {
+  for (var i = 0; i < tabPortesSpawn.length; i++) {
+    var porte = tabPortesSpawn[i];
+
+    if (porte.binEnFermeture) {
+      var y = getPositionY(porte.transformations);
+      y += 0.03;
+
+      if (y >= 0.5) {
+        y = 0.5;
+        porte.binEnFermeture = false;
+        porte.binFermee = true;
+        console.log("Porte fermée");
+      }
+
+      setPositionY(y, porte.transformations);
+
+      if (!joueurEstEncoreDansSpawn()) {
+        tabCarte[porte.caseZ][porte.caseX] = "X";
+      }
+    }
+  }
+}
+
+function getAngleVersCoffre(caseX, caseZ, coffreX, coffreZ) {
+  var dx = coffreX - caseX;
+  var dz = coffreZ - caseZ;
+  return Math.atan2(dx, dz) * 180 / Math.PI;
 }

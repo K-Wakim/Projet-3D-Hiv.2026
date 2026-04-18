@@ -66,7 +66,17 @@ function demarrer() {
       }
 
       if (tabCarte[z][x] === "X") {
-        tabPortesSpawn.push(creerPorteSpawn(gl, 0, 0.0, x + 0.5, -0.99, z + 0.5));
+        var porte = creerPorteSpawn(gl, 0, 0.0, x + 0.5, -0.99, z + 0.5);
+
+        porte.caseX = x;
+        porte.caseZ = z;
+        porte.binEnFermeture = false;
+        porte.binFermee = false;
+
+        tabPortesSpawn.push(porte);
+
+        // au départ, la porte n'est pas bloquante
+        tabCarte[z][x] = "_";
       }
     }
   }
@@ -179,7 +189,9 @@ function bouclePrincipale() {
 
   verifierCollisionCoffre();
   verifierTeleportation();
+  verifierSortieSpawn();
   animerMursOuvrables();
+  animerPortesSpawn();
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
