@@ -278,3 +278,15 @@ function getAngleVersCoffre(caseX, caseZ, coffreX, coffreZ) {
   var dz = coffreZ - caseZ;
   return Math.atan2(dx, dz) * 180 / Math.PI;
 }
+
+function mettreAJourTriangleCamera() {
+  if (objDisqueCamera == null) {
+    return;
+  }
+
+  objDisqueCamera.transformations[0] = posCamSauvegarde[0];
+  objDisqueCamera.transformations[1] = 1.51;
+  objDisqueCamera.transformations[2] = posCamSauvegarde[2];
+
+  setAngleY((-angleCameraSauvegarde * 180 / Math.PI) + 90, objDisqueCamera.transformations);
+}

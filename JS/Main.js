@@ -2,6 +2,8 @@
 var gl = null;
 var prog = null;
 var matProjection = null;
+var matProjectionPerspective = null;
+var matProjectionOrtho = null;
 
 // Objets
 var objPlancher = null;
@@ -14,6 +16,9 @@ var tabPortesSpawn = [];
 var tabTeleporteurs = [];
 var tabReceveurs = [];
 var tabFleches = [];
+var objDisqueCamera = null;
+var modeVueAerienne = false;
+var modeVueAerienneTriche = false;
 
 function demarrer() {
   var canvas = document.getElementById("monCanvas");
@@ -24,9 +29,13 @@ function demarrer() {
   gl.enable(gl.DEPTH_TEST);
   gl.viewport(0, 0, canvas.width, canvas.height);
 
-  matProjection = mat4.create();
-  mat4.perspective(45, canvas.width / canvas.height, 0.1, 100.0, matProjection);
-  gl.uniformMatrix4fv(prog.matProjection, false, matProjection);
+  matProjectionPerspective = mat4.create();
+  mat4.perspective(45, canvas.width / canvas.height, 0.1, 100.0, matProjectionPerspective);
+
+  matProjectionOrtho = mat4.create();
+  mat4.ortho(-17, 17, -17, 17, 0.1, 100.0, matProjectionOrtho);
+
+  gl.uniformMatrix4fv(prog.matProjection, false, matProjectionPerspective);
 
   initialiserCamera();
   gererClavierCamera();
@@ -34,6 +43,7 @@ function demarrer() {
 
   objPlancher = creerPlancher(gl);
   objCiel = creerCiel(gl);
+  objDisqueCamera = creerTriangleCamera(gl);
 
   // RESET tableaux
   tabMursOuvrables = [];
@@ -134,16 +144,29 @@ var tabCarte = [
 function bouclePrincipale() {
   mettreAJourCamera();
 
-  verifierCollisionCoffre();
-  verifierTeleportation();
-  verifierSortieSpawn();
-  animerMursOuvrables();
-  animerPortesSpawn();
+  if (!modeVueAerienne) {
+    verifierCollisionCoffre();
+    verifierTeleportation();
+    verifierSortieSpawn();
+    animerMursOuvrables();
+    animerPortesSpawn();
+  } else if (modeVueAerienneTriche) {
+    mettreAJourTriangleCamera();
+  }
+
+  if (modeVueAerienne) {
+    gl.uniformMatrix4fv(prog.matProjection, false, matProjectionOrtho);
+  } else {
+    gl.uniformMatrix4fv(prog.matProjection, false, matProjectionPerspective);
+  }
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   dessinerObjet(gl, prog, objPlancher);
-  dessinerObjet(gl, prog, objCiel);
+
+  if (!modeVueAerienne) {
+    dessinerObjet(gl, prog, objCiel);
+  }
 
   for (var i = 0; i < tabMursOuvrables.length; i++) {
     dessinerObjet(gl, prog, tabMursOuvrables[i]);
@@ -161,20 +184,44 @@ function bouclePrincipale() {
     dessinerObjet(gl, prog, tabPortesSpawn[i]);
   }
 
-  if (objCoffre != null) {
-    dessinerObjet(gl, prog, objCoffre);
+  // vue normale au sol
+  if (!modeVueAerienne) {
+    if (objCoffre != null) {
+      dessinerObjet(gl, prog, objCoffre);
+    }
+
+    for (var i = 0; i < tabTeleporteurs.length; i++) {
+      dessinerObjet(gl, prog, tabTeleporteurs[i]);
+    }
+
+    for (var i = 0; i < tabReceveurs.length; i++) {
+      dessinerObjet(gl, prog, tabReceveurs[i]);
+    }
+
+    for (var i = 0; i < tabFleches.length; i++) {
+      dessinerObjet(gl, prog, tabFleches[i]);
+    }
   }
 
-  for (var i = 0; i < tabTeleporteurs.length; i++) {
-  dessinerObjet(gl, prog, tabTeleporteurs[i]);
-}
+  // vue aérienne triche
+  if (modeVueAerienne && modeVueAerienneTriche) {
+    if (objCoffre != null) {
+      dessinerObjet(gl, prog, objCoffre);
+    }
 
-  for (var i = 0; i < tabReceveurs.length; i++) {
-    dessinerObjet(gl, prog, tabReceveurs[i]);
-  }
+    for (var i = 0; i < tabTeleporteurs.length; i++) {
+      dessinerObjet(gl, prog, tabTeleporteurs[i]);
+    }
 
-  for (var i = 0; i < tabFleches.length; i++) {
-    dessinerObjet(gl, prog, tabFleches[i]);
+    for (var i = 0; i < tabReceveurs.length; i++) {
+      dessinerObjet(gl, prog, tabReceveurs[i]);
+    }
+
+    for (var i = 0; i < tabFleches.length; i++) {
+      dessinerObjet(gl, prog, tabFleches[i]);
+    }
+
+    dessinerObjet(gl, prog, objDisqueCamera);
   }
 
   requestAnimationFrame(bouclePrincipale);

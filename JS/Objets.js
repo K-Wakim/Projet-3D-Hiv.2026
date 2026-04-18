@@ -694,6 +694,53 @@ function creerFleche(gl, x, y, z, angleY) {
   return fleche;
 }
 
+function creerTriangleCamera(objgl) {
+  var triangle = {};
+
+  var tabSommets = [
+     0.0, 0.0,  0.7,   // pointe plus longue
+    -0.3, 0.0, -0.3,
+     0.3, 0.0, -0.3
+  ];
+
+  triangle.vertex = objgl.createBuffer();
+  objgl.bindBuffer(objgl.ARRAY_BUFFER, triangle.vertex);
+  objgl.bufferData(objgl.ARRAY_BUFFER, new Float32Array(tabSommets), objgl.STATIC_DRAW);
+
+  var tabCouleurs = [
+    1.0, 1.0, 0.0, 1.0,
+    1.0, 1.0, 0.0, 1.0,
+    1.0, 1.0, 0.0, 1.0
+  ];
+
+  triangle.couleurs = objgl.createBuffer();
+  objgl.bindBuffer(objgl.ARRAY_BUFFER, triangle.couleurs);
+  objgl.bufferData(objgl.ARRAY_BUFFER, new Float32Array(tabCouleurs), objgl.STATIC_DRAW);
+
+  var tabTexels = [
+    0.0, 0.0,
+    0.0, 0.0,
+    0.0, 0.0
+  ];
+
+  triangle.texels = objgl.createBuffer();
+  objgl.bindBuffer(objgl.ARRAY_BUFFER, triangle.texels);
+  objgl.bufferData(objgl.ARRAY_BUFFER, new Float32Array(tabTexels), objgl.STATIC_DRAW);
+  triangle.texels.intNoTexture = 0;
+  triangle.texels.pcCouleurTexel = 0.0;
+
+  var tabIndices = [0, 1, 2];
+
+  triangle.maillage = objgl.createBuffer();
+  objgl.bindBuffer(objgl.ELEMENT_ARRAY_BUFFER, triangle.maillage);
+  objgl.bufferData(objgl.ELEMENT_ARRAY_BUFFER, new Uint16Array(tabIndices), objgl.STATIC_DRAW);
+  triangle.maillage.intNbTriangles = 1;
+
+  triangle.transformations = creerTransformations();
+
+  return triangle;
+}
+
 function dessinerObjet(objgl, objProgShaders, obj) {
   var matModeleVue = obtenirMatriceVue();
 
