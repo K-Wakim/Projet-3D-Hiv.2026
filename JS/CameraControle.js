@@ -48,6 +48,11 @@ function synchroniserCamera() {
 }
 
 function activerVueAerienne(triche) {
+  if (!peutUtiliserVueAerienne()) {
+    console.log("Score trop bas pour activer la vue aérienne");
+    return;
+  }
+
   if (modeVueAerienne) {
     modeVueAerienneTriche = triche;
     return;

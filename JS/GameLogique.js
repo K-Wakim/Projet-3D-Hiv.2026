@@ -3,6 +3,8 @@ var TEMPS_NIVEAU = 60;
 var tempsRestant = TEMPS_NIVEAU;
 var dernierTemps = 0;
 var timerActif = false;
+var tempsVueAerienneAccumule = 0;
+var dernierTempsVueAerienne = 0;
 
 var nbOuvreursParNiveau =     [4, 4, 3, 3, 2, 2, 1, 1, 0, 0];
 var nbFlechesParNiveau =      [18, 16, 14, 12, 10, 8, 6, 4, 2, 0];
@@ -23,7 +25,7 @@ function collisionMur(x, z) {
 }
 
 function verifierCollisionCoffre() {
-  if (objCoffre == null) {
+  if (objCoffre == null || jeuTermine) {
     return;
   }
 
@@ -38,6 +40,10 @@ function verifierCollisionCoffre() {
 
   if (distanceX < 0.4 && distanceZ < 0.4) {
     console.log("Coffre trouvé !");
+
+    var bonus = Math.floor(tempsRestant) * 10;
+    ajouterScore(bonus);
+
     passerAuNiveauSuivant();
   }
 }
@@ -78,8 +84,8 @@ function verifierTeleportation() {
 
 function initialiserControlesJeu() {
   document.addEventListener("keydown", function (e) {
-    tenterOuvrirMurDevantCamera();
     if (e.code === "Space" && !e.repeat) {
+      tenterOuvrirMurDevantCamera();
     }
   });
 }
@@ -115,10 +121,11 @@ function getCasesDevantCamera() {
 
   return cases;
 }
+
 function tenterOuvrirMurDevantCamera() {
 
-  if (nbOuvreurs <= 0) {
-    console.log("Plus d'ouvreurs !");
+  if (!peutUtiliserOuvreur()) {
+    console.log("Impossible d'utiliser un ouvreur");
     return;
   }
 
@@ -142,6 +149,7 @@ function tenterOuvrirMurDevantCamera() {
       if (mur.caseX === x && mur.caseZ === z && !mur.binEnOuverture && !mur.binOuvert) {
         mur.binEnOuverture = true;
         nbOuvreurs--;
+        ajouterScore(-50);
         console.log("Ouverture du mur :", x, z, "| Ouvreurs restants :", nbOuvreurs);
         return;
       }
@@ -335,7 +343,11 @@ function resetTimer() {
   timerActif = false;
 }
 
-function mettreAjourTimer() {
+function mettreAJourTimer() {
+  if (jeuTermine) {
+    return;
+  }
+
   if (!timerActif) {
     dernierTemps = Date.now();
     return;
@@ -349,26 +361,94 @@ function mettreAjourTimer() {
 
   if (tempsRestant <= 0) {
     console.log("Temps écoulé !");
+    tempsRestant = 0;
     recommencerNiveau();
   }
 
-  console.log("Temps:", tempsRestant.toFixed(1));
+  if (Math.floor(tempsRestant) !== Math.floor(tempsRestant + delta)) {
+    console.log("Temps:", Math.floor(tempsRestant));
+  }
 }
 
 function recommencerNiveau() {
-  console.log("Recommencer le niveau", niveauActuel);
+  ajouterScore(-200);
 
-  // reset camera
+  if (score < 0) {
+    score = 0;
+  }
+
+  if (score < 200) {
+    jeuTermine = true;
+    console.log("GAME OVER");
+    return;
+  }
+
+  console.log("Recommencer niveau", niveauActuel);
+
   replacerCameraAuSpawn();
-
-  // reset murs + portes
   reinitialiserEtatCarteEtObjetsFixes();
 
-  // reset ouvreurs
   nbOuvreurs = nbOuvreursParNiveau[niveauActuel - 1];
 
-  // reset timer
   resetTimer();
+}
+
+function initialiserScore() {
+  score = 300;
+  jeuTermine = false;
+  tempsVueAerienneAccumule = 0;
+  dernierTempsVueAerienne = Date.now();
+  console.log("Score initial :", score);
+}
+
+function ajouterScore(points) {
+  score += points;
+  console.log("Score :", score, "(" + (points >= 0 ? "+" : "") + points + ")");
+}
+
+function peutUtiliserOuvreur() {
+  return score >= 50 && nbOuvreurs > 0;
+}
+
+function peutUtiliserVueAerienne() {
+  return score >= 10;
+}
+
+function verifierGameOverRecommencer() {
+  if (score < 200) {
+    jeuTermine = true;
+    console.log("GAME OVER");
+    return true;
+  }
+  return false;
+}
+
+function mettreAJourScoreVueAerienne() {
+  var maintenant = Date.now();
+
+  if (!modeVueAerienne || jeuTermine) {
+    dernierTempsVueAerienne = maintenant;
+    return;
+  }
+
+  var delta = (maintenant - dernierTempsVueAerienne) / 1000;
+  dernierTempsVueAerienne = maintenant;
+
+  tempsVueAerienneAccumule += delta;
+
+  while (tempsVueAerienneAccumule >= 1.0) {
+    tempsVueAerienneAccumule -= 1.0;
+
+    if (score >= 10) {
+      ajouterScore(-10);
+    }
+
+    if (score < 10) {
+      console.log("Score trop bas pour la vue aérienne");
+      desactiverVueAerienne();
+      break;
+    }
+  }
 }
 
 function demarrerNiveau(noNiveau) {
@@ -387,6 +467,7 @@ function passerAuNiveauSuivant() {
     demarrerNiveau(niveauActuel + 1);
   } else {
     console.log("Jeu terminé !");
+    jeuTermine = true;
     objCoffre = null;
   }
 }

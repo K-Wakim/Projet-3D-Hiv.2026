@@ -8,6 +8,8 @@ var matProjectionOrtho = null;
 // Objets
 var niveauActuel = 1;
 var nbOuvreurs = 4;
+var score = 300;
+var jeuTermine = false;
 var objPlancher = null;
 var objCiel = null;
 var objCoffre = null;
@@ -42,6 +44,7 @@ function demarrer() {
   initialiserCamera();
   gererClavierCamera();
   initialiserControlesJeu();
+  initialiserScore();
 
   objPlancher = creerPlancher(gl);
   objCiel = creerCiel(gl);
@@ -144,8 +147,14 @@ var tabCarte = [
 ];
 
 function bouclePrincipale() {
+  if (jeuTermine) {
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    return;
+  }
+
   mettreAJourCamera();
-  mettreAjourTimer();
+  mettreAJourTimer();
+  mettreAJourScoreVueAerienne();
 
   if (!modeVueAerienne) {
     verifierCollisionCoffre();
