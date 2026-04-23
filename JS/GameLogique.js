@@ -112,6 +112,11 @@ function getCasesDevantCamera() {
 }
 
 function tenterOuvrirMurDevantCamera() {
+  if (nbOuvreurs <= 0) {
+    console.log("Plus d'ouvreurs !");
+    return;
+  }
+
   var casesDevant = getCasesDevantCamera();
 
   for (var c = 0; c < casesDevant.length; c++) {
@@ -131,11 +136,14 @@ function tenterOuvrirMurDevantCamera() {
 
       if (mur.caseX === x && mur.caseZ === z && !mur.binEnOuverture && !mur.binOuvert) {
         mur.binEnOuverture = true;
-        console.log("Ouverture du mur :", x, z);
+        nbOuvreurs--;
+        console.log("Ouverture du mur :", x, z, "| Ouvreurs restants :", nbOuvreurs);
         return;
       }
     }
   }
+
+  console.log("Aucun mur ouvrable devant la caméra");
 }
 
 function animerMursOuvrables() {
