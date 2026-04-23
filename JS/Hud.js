@@ -14,7 +14,7 @@ function dessineBGHUD(ctx, canvas) {
   ctx.restore();
 }
 
-function dessineScore(ctx, canvas, score) {
+function dessineHUD(ctx, canvas, score, temps) {
   ctx.save();
 
   ctx.fillStyle = "black";
@@ -24,8 +24,16 @@ function dessineScore(ctx, canvas, score) {
   ctx.textAlign = "left";
   ctx.textBaseline = "bottom";
 
+  // texte pour le HUD
+  const scoreText = `Score: ${score < 100 ? (score < 10 ? "00" + score : "0" + score) : score}`;
+  const tempsText = `Temps: ${new Date(Math.ceil(temps) * 1000).toISOString().substring(14, 19)}`; // convertit secondes en mm:ss
+
   // Small margin (10px from edges)
-  ctx.fillText("Score: " + score, 10, canvas.height);
+  ctx.fillText(scoreText, 10, canvas.height);
+
+  const scoreWidth = ctx.measureText(scoreText).width;
+
+  ctx.fillText(tempsText, 10 + scoreWidth + 20, canvas.height);
 
   ctx.restore();
 }
