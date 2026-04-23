@@ -6,10 +6,10 @@ var timerActif = false;
 var tempsVueAerienneAccumule = 0;
 var dernierTempsVueAerienne = 0;
 
-var nbOuvreursParNiveau =     [4, 4, 3, 3, 2, 2, 1, 1, 0, 0];
-var nbFlechesParNiveau =      [18, 16, 14, 12, 10, 8, 6, 4, 2, 0];
+var nbOuvreursParNiveau = [4, 4, 3, 3, 2, 2, 1, 1, 0, 0];
+var nbFlechesParNiveau = [18, 16, 14, 12, 10, 8, 6, 4, 2, 0];
 var nbTeleporteursParNiveau = [0, 1, 1, 2, 2, 3, 3, 4, 4, 5];
-var nbReceveursParNiveau =    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+var nbReceveursParNiveau = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function collisionMur(x, z) {
   var col = Math.floor(x);
@@ -123,7 +123,6 @@ function getCasesDevantCamera() {
 }
 
 function tenterOuvrirMurDevantCamera() {
-
   if (!peutUtiliserOuvreur()) {
     console.log("Impossible d'utiliser un ouvreur");
     return;
@@ -276,9 +275,7 @@ function placerObjetsAleatoiresPourNiveau(noNiveau) {
     pos = tirerCase(casesLibres);
     console.log("Niveau", noNiveau, "- TeleTransporteur", i, "→", pos.x, pos.z);
 
-    tabTeleporteurs.push(
-      creerTeleTransporteur(gl, pos.x + 0.5, 1.0, pos.z + 0.5)
-    );
+    tabTeleporteurs.push(creerTeleTransporteur(gl, pos.x + 0.5, 1.0, pos.z + 0.5));
   }
 
   // Télé-récepteurs
@@ -286,9 +283,7 @@ function placerObjetsAleatoiresPourNiveau(noNiveau) {
     pos = tirerCase(casesLibres);
     console.log("Niveau", noNiveau, "- TeleReceveur", i, "→", pos.x, pos.z);
 
-    tabReceveurs.push(
-      creerTeleReceveur(gl, pos.x + 0.5, 1.0, pos.z + 0.5)
-    );
+    tabReceveurs.push(creerTeleReceveur(gl, pos.x + 0.5, 1.0, pos.z + 0.5));
   }
 
   // Flèches
@@ -297,9 +292,7 @@ function placerObjetsAleatoiresPourNiveau(noNiveau) {
 
     var angleFleche = getAngleVersCoffre(pos.x, pos.z, coffreCaseX, coffreCaseZ);
 
-    tabFleches.push(
-      creerFleche(gl, pos.x + 0.5, 1.3, pos.z + 0.5, angleFleche)
-    );
+    tabFleches.push(creerFleche(gl, pos.x + 0.5, 1.3, pos.z + 0.5, angleFleche));
 
     console.log("Niveau", noNiveau, "- Fleche", i, "→", pos.x, pos.z, "| angle:", angleFleche.toFixed(2));
   }
@@ -379,7 +372,6 @@ function recommencerNiveau() {
 
   if (score < 200) {
     jeuTermine = true;
-    console.log("GAME OVER");
     return;
   }
 
@@ -472,11 +464,10 @@ function passerAuNiveauSuivant() {
   }
 }
 
-
 function getAngleVersCoffre(caseX, caseZ, coffreX, coffreZ) {
   var dx = coffreX - caseX;
   var dz = coffreZ - caseZ;
-  return Math.atan2(dx, dz) * 180 / Math.PI;
+  return (Math.atan2(dx, dz) * 180) / Math.PI;
 }
 
 function mettreAJourTriangleCamera() {
@@ -488,5 +479,5 @@ function mettreAJourTriangleCamera() {
   objDisqueCamera.transformations[1] = 1.51;
   objDisqueCamera.transformations[2] = posCamSauvegarde[2];
 
-  setAngleY((-angleCameraSauvegarde * 180 / Math.PI) + 90, objDisqueCamera.transformations);
+  setAngleY((-angleCameraSauvegarde * 180) / Math.PI + 90, objDisqueCamera.transformations);
 }

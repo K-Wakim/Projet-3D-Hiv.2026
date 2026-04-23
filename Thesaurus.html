@@ -18,8 +18,8 @@
     <!-- Ton code -->
     <script src="JS/Objets.js"></script>
     <script src="JS/CameraControle.js"></script>
-    <script src="JS/GameLogique.js"></script>
     <script src="JS/Hud.js"></script>
+    <script src="JS/GameLogique.js"></script>
     <script src="JS/Main.js"></script>
   </head>
 
@@ -31,7 +31,12 @@
       </p>
     </header>
 
-    <!-- Canvas -->
-    <canvas id="monCanvas" width="800" height="600"> Votre navigateur ne supporte pas la balise canvas </canvas>
+    <!-- Conteneur pour superposer les canvas-->
+    <div id="gameContainer">
+      <!-- Canvas -->
+      <canvas id="monCanvas" width="800" height="600"> Votre navigateur ne supporte pas la balise canvas </canvas>
+      <!-- Canvas pour le HUD -->
+      <canvas id="hudCanvas" width="800" height="650"> Votre navigateur ne supporte pas la balise canvas </canvas>
+    </div>
   </body>
 </html>

@@ -4,6 +4,9 @@ var prog = null;
 var matProjection = null;
 var matProjectionPerspective = null;
 var matProjectionOrtho = null;
+var canvas = null;
+var hudCanvas = null;
+var ctx = null;
 
 // Objets
 var niveauActuel = 1;
@@ -25,9 +28,12 @@ var modeVueAerienne = false;
 var modeVueAerienneTriche = false;
 
 function demarrer() {
-  var canvas = document.getElementById("monCanvas");
+  canvas = document.getElementById("monCanvas");
   gl = initWebGL(canvas);
   prog = initShaders(gl);
+  hudCanvas = document.getElementById("hudCanvas");
+  ctx = hudCanvas.getContext("2d");
+  console.log(`ctx: ${ctx}`);
 
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   gl.enable(gl.DEPTH_TEST);
@@ -62,7 +68,6 @@ function demarrer() {
   // Création des objets fixes
   for (var z = 0; z < tabCarte.length; z++) {
     for (var x = 0; x < tabCarte[z].length; x++) {
-
       if (tabCarte[z][x] === "O") {
         var mur = creerMurOuvrable(gl, 0, 0.0, x + 0.5, 0.5, z + 0.5);
         mur.caseX = x;
@@ -235,6 +240,12 @@ function bouclePrincipale() {
 
     dessinerObjet(gl, prog, objDisqueCamera);
   }
+
+  clearHUD(ctx, hudCanvas);
+  dessineBGHUD(ctx, hudCanvas);
+  dessineScore(ctx, hudCanvas, score);
+
+  if (jeuTermine) dessineGameOver(ctx, hudCanvas);
 
   requestAnimationFrame(bouclePrincipale);
 }

@@ -1,14 +1,63 @@
-﻿BODY { font-family:arial; font-size:10pt; color:black; }
-.sTexteCentre { text-align:center; }
-.sLargeurDiv { width:640px; padding-left:10px; padding-right:10px;}
+﻿BODY {
+  font-family: arial;
+  font-size: 10pt;
+  color: black;
+}
+.sTexteCentre {
+  text-align: center;
+}
+.sLargeurDiv {
+  width: 640px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
 
-.sEntete {margin-bottom:5px;  border-bottom-width:2px;  border-bottom-style:solid; }
-.sCorps {}
-.sPiedDePage {margin-top:5px;  border-top-width:2px;  border-top-style:solid; }
-.sTitreApp { font-size:150%; font-weight:bold; text-decoration:underline; } 
-.sAuteurApp { font-variant:small-caps; font-style:italic; font-weight:bold;}    
+.sEntete {
+  margin-bottom: 5px;
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+}
+.sCorps {
+}
+.sPiedDePage {
+  margin-top: 5px;
+  border-top-width: 2px;
+  border-top-style: solid;
+}
+.sTitreApp {
+  font-size: 150%;
+  font-weight: bold;
+  text-decoration: underline;
+}
+.sAuteurApp {
+  font-variant: small-caps;
+  font-style: italic;
+  font-weight: bold;
+}
 
-A:link IMG, A:visited IMG { border:none; }
-A:hover IMG { border-style:double; border-width:2px; border-color:Green;}
+A:link IMG,
+A:visited IMG {
+  border: none;
+}
+A:hover IMG {
+  border-style: double;
+  border-width: 2px;
+  border-color: Green;
+}
 
+#gameContainer {
+  position: relative;
+  width: 800px;
+  height: 600px;
+}
 
+#monCanvas,
+#hudCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#hudCanvas {
+  pointer-events: none; /* optional: lets clicks go through */
+}
