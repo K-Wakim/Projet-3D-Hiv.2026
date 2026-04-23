@@ -1,4 +1,9 @@
 // Contient la logique du jeu, collision, ouverture de mur, détection du trésor, passage au prochain niveau, téléportation, placement des flèches, timer, score, reset niveau, game over/win, etc...
+var TEMPS_NIVEAU = 60;
+var tempsRestant = TEMPS_NIVEAU;
+var dernierTemps = 0;
+var timerActif = false;
+
 var nbOuvreursParNiveau =     [4, 4, 3, 3, 2, 2, 1, 1, 0, 0];
 var nbFlechesParNiveau =      [18, 16, 14, 12, 10, 8, 6, 4, 2, 0];
 var nbTeleporteursParNiveau = [0, 1, 1, 2, 2, 3, 3, 4, 4, 5];
@@ -73,8 +78,8 @@ function verifierTeleportation() {
 
 function initialiserControlesJeu() {
   document.addEventListener("keydown", function (e) {
+    tenterOuvrirMurDevantCamera();
     if (e.code === "Space" && !e.repeat) {
-      tenterOuvrirMurDevantCamera();
     }
   });
 }
@@ -110,8 +115,8 @@ function getCasesDevantCamera() {
 
   return cases;
 }
-
 function tenterOuvrirMurDevantCamera() {
+
   if (nbOuvreurs <= 0) {
     console.log("Plus d'ouvreurs !");
     return;
@@ -324,6 +329,48 @@ function reinitialiserEtatCarteEtObjetsFixes() {
   }
 }
 
+function resetTimer() {
+  tempsRestant = TEMPS_NIVEAU;
+  dernierTemps = Date.now();
+  timerActif = false;
+}
+
+function mettreAjourTimer() {
+  if (!timerActif) {
+    dernierTemps = Date.now();
+    return;
+  }
+
+  var maintenant = Date.now();
+  var delta = (maintenant - dernierTemps) / 1000;
+
+  dernierTemps = maintenant;
+  tempsRestant -= delta;
+
+  if (tempsRestant <= 0) {
+    console.log("Temps écoulé !");
+    recommencerNiveau();
+  }
+
+  console.log("Temps:", tempsRestant.toFixed(1));
+}
+
+function recommencerNiveau() {
+  console.log("Recommencer le niveau", niveauActuel);
+
+  // reset camera
+  replacerCameraAuSpawn();
+
+  // reset murs + portes
+  reinitialiserEtatCarteEtObjetsFixes();
+
+  // reset ouvreurs
+  nbOuvreurs = nbOuvreursParNiveau[niveauActuel - 1];
+
+  // reset timer
+  resetTimer();
+}
+
 function demarrerNiveau(noNiveau) {
   niveauActuel = noNiveau;
 
@@ -332,6 +379,7 @@ function demarrerNiveau(noNiveau) {
   replacerCameraAuSpawn();
   reinitialiserEtatCarteEtObjetsFixes();
   placerObjetsAleatoiresPourNiveau(niveauActuel);
+  resetTimer();
 }
 
 function passerAuNiveauSuivant() {
@@ -342,6 +390,7 @@ function passerAuNiveauSuivant() {
     objCoffre = null;
   }
 }
+
 
 function getAngleVersCoffre(caseX, caseZ, coffreX, coffreZ) {
   var dx = coffreX - caseX;

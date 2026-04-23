@@ -143,6 +143,12 @@ function mettreAJourCamera() {
     nouveauZ -= Math.sin(angleCamera) * vitesseCamera;
   }
 
+  if ((touches["ArrowUp"] || touches["ArrowDown"]) && !timerActif) {
+    timerActif = true;
+    dernierTemps = Date.now();
+    console.log("Timer démarré");
+  }
+
   if (!collisionMur(nouveauX, nouveauZ)) {
     posCam[0] = nouveauX;
     posCam[2] = nouveauZ;

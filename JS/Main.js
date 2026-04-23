@@ -145,6 +145,7 @@ var tabCarte = [
 
 function bouclePrincipale() {
   mettreAJourCamera();
+  mettreAjourTimer();
 
   if (!modeVueAerienne) {
     verifierCollisionCoffre();
