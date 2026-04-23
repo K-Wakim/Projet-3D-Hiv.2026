@@ -1,4 +1,9 @@
 // Contient la logique du jeu, collision, ouverture de mur, détection du trésor, passage au prochain niveau, téléportation, placement des flèches, timer, score, reset niveau, game over/win, etc...
+var nbOuvreursParNiveau =     [4, 4, 3, 3, 2, 2, 1, 1, 0, 0];
+var nbFlechesParNiveau =      [18, 16, 14, 12, 10, 8, 6, 4, 2, 0];
+var nbTeleporteursParNiveau = [0, 1, 1, 2, 2, 3, 3, 4, 4, 5];
+var nbReceveursParNiveau =    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
 function collisionMur(x, z) {
   var col = Math.floor(x);
   var lig = Math.floor(z);
@@ -26,12 +31,9 @@ function verifierCollisionCoffre() {
   var distanceX = Math.abs(xCam - xCoffre);
   var distanceZ = Math.abs(zCam - zCoffre);
 
-  // seuil de collision simple
   if (distanceX < 0.4 && distanceZ < 0.4) {
     console.log("Coffre trouvé !");
-
-    // temporaire : on enlève le coffre
-    objCoffre = null; // à remplacer par niveauActuel++ éventuellement
+    passerAuNiveauSuivant();
   }
 }
 
@@ -228,39 +230,48 @@ function tirerCase(casesLibres) {
   return casesLibres.splice(index, 1)[0];
 }
 
-function placerObjetsAleatoires() {
+function placerObjetsAleatoiresPourNiveau(noNiveau) {
+  var indexNiveau = noNiveau - 1;
+
+  objCoffre = null;
+  tabTeleporteurs = [];
+  tabReceveurs = [];
+  tabFleches = [];
+
+  nbOuvreurs = nbOuvreursParNiveau[indexNiveau];
+
   var casesLibres = getCasesLibres();
 
   // Coffre
   var pos = tirerCase(casesLibres);
   objCoffre = creerCoffre(gl, pos.x + 0.5, 0.45, pos.z + 0.5);
-  console.log("Coffre →", pos.x, pos.z);
+  console.log("Niveau", noNiveau, "- Coffre →", pos.x, pos.z);
 
   var coffreCaseX = pos.x;
   var coffreCaseZ = pos.z;
 
-  // 3 téléporteurs
-  for (var i = 0; i < 3; i++) {
+  // Télé-transporteurs
+  for (var i = 0; i < nbTeleporteursParNiveau[indexNiveau]; i++) {
     pos = tirerCase(casesLibres);
-    console.log("TeleTransporteur", i, "→", pos.x, pos.z);
+    console.log("Niveau", noNiveau, "- TeleTransporteur", i, "→", pos.x, pos.z);
 
     tabTeleporteurs.push(
       creerTeleTransporteur(gl, pos.x + 0.5, 1.0, pos.z + 0.5)
     );
   }
 
-  // 3 receveurs
-  for (var i = 0; i < 3; i++) {
+  // Télé-récepteurs
+  for (var i = 0; i < nbReceveursParNiveau[indexNiveau]; i++) {
     pos = tirerCase(casesLibres);
-    console.log("TeleReceveur", i, "→", pos.x, pos.z);
+    console.log("Niveau", noNiveau, "- TeleReceveur", i, "→", pos.x, pos.z);
 
     tabReceveurs.push(
       creerTeleReceveur(gl, pos.x + 0.5, 1.0, pos.z + 0.5)
     );
   }
 
-  // 10 flèches
-  for (var i = 0; i < 10; i++) {
+  // Flèches
+  for (var i = 0; i < nbFlechesParNiveau[indexNiveau]; i++) {
     pos = tirerCase(casesLibres);
 
     var angleFleche = getAngleVersCoffre(pos.x, pos.z, coffreCaseX, coffreCaseZ);
@@ -269,7 +280,58 @@ function placerObjetsAleatoires() {
       creerFleche(gl, pos.x + 0.5, 1.3, pos.z + 0.5, angleFleche)
     );
 
-    console.log("Fleche", i, "→", pos.x, pos.z, "| angle:", angleFleche.toFixed(2));
+    console.log("Niveau", noNiveau, "- Fleche", i, "→", pos.x, pos.z, "| angle:", angleFleche.toFixed(2));
+  }
+}
+
+function replacerCameraAuSpawn() {
+  posCam = [15.5, 0.6, 15.5];
+  angleCamera = -Math.PI / 2;
+
+  mettreAJourCibleCamera();
+  synchroniserCamera();
+}
+
+function reinitialiserEtatCarteEtObjetsFixes() {
+  // refermer tous les murs ouvrables
+  for (var i = 0; i < tabMursOuvrables.length; i++) {
+    var mur = tabMursOuvrables[i];
+
+    setPositionY(0.5, mur.transformations);
+    mur.binEnOuverture = false;
+    mur.binOuvert = false;
+
+    tabCarte[mur.caseZ][mur.caseX] = "O";
+  }
+
+  // rouvrir la porte du spawn
+  for (var i = 0; i < tabPortesSpawn.length; i++) {
+    var porte = tabPortesSpawn[i];
+
+    setPositionY(-0.99, porte.transformations);
+    porte.binEnFermeture = false;
+    porte.binFermee = false;
+
+    tabCarte[porte.caseZ][porte.caseX] = "_";
+  }
+}
+
+function demarrerNiveau(noNiveau) {
+  niveauActuel = noNiveau;
+
+  console.log("===== NIVEAU " + niveauActuel + " =====");
+
+  replacerCameraAuSpawn();
+  reinitialiserEtatCarteEtObjetsFixes();
+  placerObjetsAleatoiresPourNiveau(niveauActuel);
+}
+
+function passerAuNiveauSuivant() {
+  if (niveauActuel < 10) {
+    demarrerNiveau(niveauActuel + 1);
+  } else {
+    console.log("Jeu terminé !");
+    objCoffre = null;
   }
 }
 

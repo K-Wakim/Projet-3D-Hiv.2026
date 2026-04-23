@@ -6,6 +6,8 @@ var matProjectionPerspective = null;
 var matProjectionOrtho = null;
 
 // Objets
+var niveauActuel = 1;
+var nbOuvreurs = 4;
 var objPlancher = null;
 var objCiel = null;
 var objCoffre = null;
@@ -91,7 +93,7 @@ function demarrer() {
     }
   }
 
-  placerObjetsAleatoires();
+  demarrerNiveau(1);
 
   requestAnimationFrame(bouclePrincipale);
 }
