@@ -14,7 +14,7 @@ function dessineBGHUD(ctx, canvas) {
   ctx.restore();
 }
 
-function dessineHUD(ctx, canvas, score, temps) {
+function dessineHUD(ctx, canvas, score, temps, ouvreur, niveau) {
   ctx.save();
 
   ctx.fillStyle = "black";
@@ -27,8 +27,8 @@ function dessineHUD(ctx, canvas, score, temps) {
   // texte pour le HUD
   const scoreText = `Score: ${score < 100 ? (score < 10 ? "00" + score : "0" + score) : score}`;
   const tempsText = `Temps: ${new Date(Math.ceil(temps) * 1000).toISOString().substring(14, 19)}`; // convertit secondes en mm:ss
-  const ouvreurText = `Ouvreurs: ${nbOuvreurs}`;
-  const niveauText = `Niveau: ${niveauActuel}`;
+  const ouvreurText = `Ouvreurs: ${ouvreur}`;
+  const niveauText = `Niveau: ${niveau}`;
 
   const scoreWidth = ctx.measureText(scoreText).width;
   const tempsWidth = ctx.measureText(tempsText).width;

@@ -243,7 +243,7 @@ function bouclePrincipale() {
 
   clearHUD(ctx, hudCanvas);
   dessineBGHUD(ctx, hudCanvas);
-  dessineHUD(ctx, hudCanvas, score, tempsRestant);
+  dessineHUD(ctx, hudCanvas, score, tempsRestant, nbOuvreurs, niveauActuel);
 
   if (jeuTermine) dessineGameOver(ctx, hudCanvas);
 
