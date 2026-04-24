@@ -18,7 +18,7 @@ function dessineHUD(ctx, canvas, score, temps) {
   ctx.save();
 
   ctx.fillStyle = "black";
-  ctx.font = "45px Arial";
+  ctx.font = "30px Arial";
 
   // Align to bottom-left
   ctx.textAlign = "left";
@@ -27,13 +27,21 @@ function dessineHUD(ctx, canvas, score, temps) {
   // texte pour le HUD
   const scoreText = `Score: ${score < 100 ? (score < 10 ? "00" + score : "0" + score) : score}`;
   const tempsText = `Temps: ${new Date(Math.ceil(temps) * 1000).toISOString().substring(14, 19)}`; // convertit secondes en mm:ss
-
-  // Small margin (10px from edges)
-  ctx.fillText(scoreText, 10, canvas.height);
+  const ouvreurText = `Ouvreurs: ${nbOuvreurs}`;
+  const niveauText = `Niveau: ${niveauActuel}`;
 
   const scoreWidth = ctx.measureText(scoreText).width;
+  const tempsWidth = ctx.measureText(tempsText).width;
+  const ouvreurWidth = ctx.measureText(ouvreurText).width;
+  const niveauWidth = ctx.measureText(niveauText).width;
 
-  ctx.fillText(tempsText, 10 + scoreWidth + 20, canvas.height);
+  const textTotal = scoreText + "  " + tempsText + "  " + ouvreurText + "  " + niveauText;
+
+  const posXTexte = 50;
+  const posYTexte = canvas.height - 10; // 10px from bottom
+
+  // Small margin (10px from edges)
+  ctx.fillText(textTotal, posXTexte, posYTexte);
 
   ctx.restore();
 }
