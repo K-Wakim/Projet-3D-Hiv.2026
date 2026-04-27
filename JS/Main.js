@@ -13,6 +13,7 @@ var niveauActuel = 1;
 var nbOuvreurs = 4;
 var score = 300;
 var jeuTermine = false;
+var jeuEnPause = false;
 var objPlancher = null;
 var objCiel = null;
 var objCoffre = null;

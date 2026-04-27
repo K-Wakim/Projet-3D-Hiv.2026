@@ -87,6 +87,14 @@ function initialiserControlesJeu() {
     if (e.code === "Space" && !e.repeat) {
       tenterOuvrirMurDevantCamera();
     }
+
+    if (e.code === "KeyN" && !e.repeat) {
+      tricheNiveauSuivant();
+    }
+
+    if (e.code === "KeyP" && !e.repeat) {
+      togglePause();
+    }
   });
 }
 
@@ -147,8 +155,12 @@ function tenterOuvrirMurDevantCamera() {
 
       if (mur.caseX === x && mur.caseZ === z && !mur.binEnOuverture && !mur.binOuvert) {
         mur.binEnOuverture = true;
-        nbOuvreurs--;
-        ajouterScore(-50);
+
+        if (!jeuEnPause) {
+          nbOuvreurs--;
+          ajouterScore(-50);
+        }
+
         console.log("Ouverture du mur :", x, z, "| Ouvreurs restants :", nbOuvreurs);
         return;
       }
@@ -341,6 +353,11 @@ function mettreAJourTimer() {
     return;
   }
 
+  if (jeuEnPause) {
+    dernierTemps = Date.now();
+    return;
+  }
+
   if (!timerActif) {
     dernierTemps = Date.now();
     return;
@@ -423,6 +440,11 @@ function mettreAJourScoreVueAerienne() {
     return;
   }
 
+  if (jeuEnPause) {
+    dernierTempsVueAerienne = Date.now();
+    return;
+  }
+
   var delta = (maintenant - dernierTempsVueAerienne) / 1000;
   dernierTempsVueAerienne = maintenant;
 
@@ -480,4 +502,23 @@ function mettreAJourTriangleCamera() {
   objDisqueCamera.transformations[2] = posCamSauvegarde[2];
 
   setAngleY((-angleCameraSauvegarde * 180) / Math.PI + 90, objDisqueCamera.transformations);
+}
+
+function tricheNiveauSuivant() {
+  if (jeuTermine) {
+    return;
+  }
+
+  passerAuNiveauSuivant();
+}
+
+function togglePause() {
+  jeuEnPause = !jeuEnPause;
+
+  if (!jeuEnPause) {
+    dernierTemps = Date.now();
+    dernierTempsVueAerienne = Date.now();
+  }
+
+  console.log(jeuEnPause ? "Pause activée" : "Pause désactivée");
 }
