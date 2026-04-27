@@ -59,7 +59,26 @@ function dessineGameOver(ctx, canvas) {
   ctx.textBaseline = "middle";
 
   // Draw text at center
-  ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
+  ctx.fillText("Game Over !", canvas.width / 2, canvas.height / 2);
+
+  // Restore state
+  ctx.restore();
+}
+
+function dessineVictoire(ctx, canvas) {
+  // Save current state
+  ctx.save();
+
+  // Style
+  ctx.fillStyle = "green";
+  ctx.font = "bold 48px Arial";
+
+  // Center alignment
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  // Draw text at center
+  ctx.fillText("Victoire !", canvas.width / 2, canvas.height / 2);
 
   // Restore state
   ctx.restore();

@@ -13,6 +13,7 @@ var niveauActuel = 1;
 var nbOuvreurs = 4;
 var score = 300;
 var jeuTermine = false;
+var jeuGagne = false
 var jeuEnPause = false;
 var objPlancher = null;
 var objCiel = null;
@@ -155,6 +156,17 @@ var tabCarte = [
 function bouclePrincipale() {
   if (jeuTermine) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    clearHUD(ctx, hudCanvas);
+    dessineBGHUD(ctx, hudCanvas);
+    dessineHUD(ctx, hudCanvas, score, tempsRestant, nbOuvreurs, niveauActuel);
+
+    if (jeuGagne) {
+      dessineVictoire(ctx, hudCanvas);
+    } else {
+      dessineGameOver(ctx, hudCanvas);
+    }
+
     return;
   }
 
@@ -246,7 +258,12 @@ function bouclePrincipale() {
   dessineBGHUD(ctx, hudCanvas);
   dessineHUD(ctx, hudCanvas, score, tempsRestant, nbOuvreurs, niveauActuel);
 
-  if (jeuTermine) dessineGameOver(ctx, hudCanvas);
-
+  if (jeuTermine) {
+    if (jeuGagne) {
+      dessineVictoire(ctx, hudCanvas);
+    } else {
+      dessineGameOver(ctx, hudCanvas);
+    }
+  }
   requestAnimationFrame(bouclePrincipale);
 }

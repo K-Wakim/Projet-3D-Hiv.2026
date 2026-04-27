@@ -405,8 +405,11 @@ function recommencerNiveau() {
 function initialiserScore() {
   score = 300;
   jeuTermine = false;
+  jeuGagne = false;
+
   tempsVueAerienneAccumule = 0;
   dernierTempsVueAerienne = Date.now();
+
   console.log("Score initial :", score);
 }
 
@@ -480,8 +483,9 @@ function passerAuNiveauSuivant() {
   if (niveauActuel < 10) {
     demarrerNiveau(niveauActuel + 1);
   } else {
-    console.log("Jeu terminé !");
+    console.log("VICTOIRE !");
     jeuTermine = true;
+    jeuGagne = true;
     objCoffre = null;
   }
 }
