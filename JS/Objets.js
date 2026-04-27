@@ -14,14 +14,19 @@ function creerPlancher(objgl) {
   objgl.bindBuffer(objgl.ARRAY_BUFFER, plancher.couleurs);
   objgl.bufferData(objgl.ARRAY_BUFFER, new Float32Array(tabCouleurs), objgl.STATIC_DRAW);
 
-  var tabTexels = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+  var tabTexels = [
+    0.0, 0.0,
+    12.0, 0.0,
+    12.0, 12.0,
+    0.0, 12.0
+  ];
 
   plancher.texels = objgl.createBuffer();
   objgl.bindBuffer(objgl.ARRAY_BUFFER, plancher.texels);
   objgl.bufferData(objgl.ARRAY_BUFFER, new Float32Array(tabTexels), objgl.STATIC_DRAW);
 
   plancher.texels.intNoTexture = 0;
-  plancher.texels.pcCouleurTexel = 0.0;
+  plancher.texels.pcCouleurTexel = 1.0;
 
   var tabIndices = [0, 1, 2, 0, 2, 3];
 
@@ -35,7 +40,7 @@ function creerPlancher(objgl) {
   return plancher;
 }
 
-function creerSolSpawn(objgl, x, z) {
+function creerSolSpawn(objgl,noTexture, pcTexture, x, z) {
   var solSpawn = {};
 
   var tabSommets = [
@@ -62,17 +67,17 @@ function creerSolSpawn(objgl, x, z) {
 
   var tabTexels = [
     0.0, 0.0,
-    0.0, 0.0,
-    0.0, 0.0,
-    0.0, 0.0
+    1.0, 0.0,
+    1.0, 1.0,
+    0.0, 1.0
   ];
 
   solSpawn.texels = objgl.createBuffer();
   objgl.bindBuffer(objgl.ARRAY_BUFFER, solSpawn.texels);
   objgl.bufferData(objgl.ARRAY_BUFFER, new Float32Array(tabTexels), objgl.STATIC_DRAW);
 
-  solSpawn.texels.intNoTexture = 0;
-  solSpawn.texels.pcCouleurTexel = 0.0;
+  solSpawn.texels.intNoTexture = noTexture;
+  solSpawn.texels.pcCouleurTexel = pcTexture;
 
   var tabIndices = [0, 1, 2, 0, 2, 3];
 
@@ -117,17 +122,17 @@ function creerCiel(objgl) {
 
   var tabTexels = [
     0.0, 0.0,
-    0.0, 0.0,
-    0.0, 0.0,
-    0.0, 0.0
+    1.0, 0.0,
+    1.0, 1.0,
+    0.0, 1.0
   ];
 
   ciel.texels = objgl.createBuffer();
   objgl.bindBuffer(objgl.ARRAY_BUFFER, ciel.texels);
   objgl.bufferData(objgl.ARRAY_BUFFER, new Float32Array(tabTexels), objgl.STATIC_DRAW);
 
-  ciel.texels.intNoTexture = 0;
-  ciel.texels.pcCouleurTexel = 0.0;
+  ciel.texels.intNoTexture = 4;
+  ciel.texels.pcCouleurTexel = 1.0;
 
   var tabIndices = [
     0, 2, 1,   // inversé pour être visible d’en dessous
@@ -291,8 +296,8 @@ function creerMurNonOuvrable(gl, noTexture, pcTexture, x, y, z) {
   gl.bindBuffer(gl.ARRAY_BUFFER, mur.texels);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tabTexels), gl.STATIC_DRAW);
 
-  mur.texels.intNoTexture = noTexture;
-  mur.texels.pcCouleurTexel = pcTexture;
+  mur.texels.intNoTexture = 1;
+  mur.texels.pcCouleurTexel = 1.0;
 
   var tabIndices = [
     0,1,2, 0,2,3,
@@ -395,7 +400,7 @@ function creerPorteSpawn(gl, noTexture, pcTexture, x, y, z) {
   return porte;
 }
 
-function creerCoffre(gl, x, y, z) {
+function creerCoffre(gl, noTexture, pcTexture, x, y, z) {
   var coffre = {};
 
   var w = 0.2;
@@ -439,8 +444,8 @@ function creerCoffre(gl, x, y, z) {
   gl.bindBuffer(gl.ARRAY_BUFFER, coffre.texels);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tabTexels), gl.STATIC_DRAW);
 
-  coffre.texels.intNoTexture = 0;
-  coffre.texels.pcCouleurTexel = 0.0;
+  coffre.texels.intNoTexture = noTexture;
+  coffre.texels.pcCouleurTexel = pcTexture;
 
   var tabIndices = [
     0,1,2, 0,2,3,
@@ -464,7 +469,7 @@ function creerCoffre(gl, x, y, z) {
   return coffre;
 }
 
-function creerTeleTransporteur(gl, x, y, z) {
+function creerTeleTransporteur(gl, noTexture, pcTexture, x, y, z) {
   var obj = {};
 
   var w = 0.3;
@@ -508,8 +513,8 @@ function creerTeleTransporteur(gl, x, y, z) {
   gl.bindBuffer(gl.ARRAY_BUFFER, obj.texels);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tabTexels), gl.STATIC_DRAW);
 
-  obj.texels.intNoTexture = 0;
-  obj.texels.pcCouleurTexel = 0.0;
+  obj.texels.intNoTexture = noTexture;
+  obj.texels.pcCouleurTexel = pcTexture;
 
   var tabIndices = [
     0,1,2,0,2,3, 4,5,6,4,6,7,
@@ -530,7 +535,7 @@ function creerTeleTransporteur(gl, x, y, z) {
   return obj;
 }
 
-function creerTeleReceveur(gl, x, y, z) {
+function creerTeleReceveur(gl, noTexture, pcTexture, x, y, z) {
   var obj = {};
 
   var w = 0.3;
@@ -574,8 +579,8 @@ function creerTeleReceveur(gl, x, y, z) {
   gl.bindBuffer(gl.ARRAY_BUFFER, obj.texels);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tabTexels), gl.STATIC_DRAW);
 
-  obj.texels.intNoTexture = 0;
-  obj.texels.pcCouleurTexel = 0.0;
+  obj.texels.intNoTexture = noTexture;
+  obj.texels.pcCouleurTexel = pcTexture;
 
   var tabIndices = [
     0,1,2,0,2,3, 4,5,6,4,6,7,
@@ -626,10 +631,10 @@ function creerFleche(gl, x, y, z, angleY) {
   gl.bindBuffer(gl.ARRAY_BUFFER, fleche.vertex);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tabSommets), gl.STATIC_DRAW);
 
-  // orange
-  var c1 = [1.0, 0.5, 0.0, 1.0];
-  var c2 = [1.0, 0.7, 0.2, 1.0];
-  var c3 = [0.8, 0.35, 0.0, 1.0];
+  // cyan
+  var c1 = [0.0, 1.0, 1.0, 1.0];
+  var c2 = [0.0, 1.0, 1.0, 1.0];
+  var c3 = [0.0, 1.0, 1.0, 1.0];  
 
   var tabCouleurs = [
     ...c2, ...c2, ...c1, ...c1, ...c1, ...c1, ...c2,   // avant
@@ -762,6 +767,10 @@ function dessinerObjet(objgl, objProgShaders, obj) {
 
   objgl.bindBuffer(objgl.ARRAY_BUFFER, obj.texels);
   objgl.vertexAttribPointer(objProgShaders.posTexel, 2, objgl.FLOAT, false, 0, 0);
+
+  objgl.activeTexture(objgl.TEXTURE0);
+  objgl.bindTexture(objgl.TEXTURE_2D, tabObjTextures[obj.texels.intNoTexture]);
+  objgl.uniform1i(objProgShaders.noTexture, 0);
 
   objgl.uniform1f(objProgShaders.pcCouleurTexel, obj.texels.pcCouleurTexel);
 

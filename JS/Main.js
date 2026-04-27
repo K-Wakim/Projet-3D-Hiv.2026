@@ -25,14 +25,30 @@ var tabPortesSpawn = [];
 var tabTeleporteurs = [];
 var tabReceveurs = [];
 var tabFleches = [];
+var tabObjTextures = [];
 var objDisqueCamera = null;
 var modeVueAerienne = false;
 var modeVueAerienneTriche = false;
 
-function demarrer() {
+// Images
+var tabImages = [
+  "Assets/Images/Plancher.png",
+  "Assets/Images/MurNonOuvrable.png",
+  "Assets/Images/MurOuvrable.png",
+  "Assets/Images/PlancherSpawn.png",
+  "Assets/Images/Ciel.png",
+  "Assets/Images/TeleTransporteur.png",
+  "Assets/Images/TeleReceveur.png",
+  "Assets/Images/Coffre.png",
+];
+
+// Sons
+
+async function demarrer() {
   canvas = document.getElementById("monCanvas");
   gl = initWebGL(canvas);
   prog = initShaders(gl);
+  tabObjTextures = await creerTextures(gl, tabImages);
   hudCanvas = document.getElementById("hudCanvas");
   ctx = hudCanvas.getContext("2d");
   console.log(`ctx: ${ctx}`);
@@ -42,8 +58,7 @@ function demarrer() {
   gl.viewport(0, 0, canvas.width, canvas.height);
 
   matProjectionPerspective = mat4.create();
-  mat4.perspective(45, canvas.width / canvas.height, 0.1, 100.0, matProjectionPerspective);
-
+mat4.perspective(45, canvas.width / canvas.height, 0.02, 100.0, matProjectionPerspective);
   matProjectionOrtho = mat4.create();
   mat4.ortho(-17, 17, -17, 17, 0.1, 100.0, matProjectionOrtho);
 
@@ -71,7 +86,7 @@ function demarrer() {
   for (var z = 0; z < tabCarte.length; z++) {
     for (var x = 0; x < tabCarte[z].length; x++) {
       if (tabCarte[z][x] === "O") {
-        var mur = creerMurOuvrable(gl, 0, 0.0, x + 0.5, 0.5, z + 0.5);
+        var mur = creerMurOuvrable(gl, 2, 1.0, x + 0.5, 0.5, z + 0.5);
         mur.caseX = x;
         mur.caseZ = z;
         mur.binEnOuverture = false;
@@ -80,15 +95,15 @@ function demarrer() {
       }
 
       if (tabCarte[z][x] === "M") {
-        tabMursNonOuvrables.push(creerMurNonOuvrable(gl, 0, 0.0, x + 0.5, 0.5, z + 0.5));
+        tabMursNonOuvrables.push(creerMurNonOuvrable(gl, 1, 1.0, x + 0.5, 0.5, z + 0.5));
       }
 
       if (tabCarte[z][x] === "S") {
-        tabSolsSpawn.push(creerSolSpawn(gl, x, z));
+        tabSolsSpawn.push(creerSolSpawn(gl,3, 1.0, x, z));
       }
 
       if (tabCarte[z][x] === "X") {
-        var porte = creerPorteSpawn(gl, 0, 0.0, x + 0.5, -0.99, z + 0.5);
+        var porte = creerPorteSpawn(gl, 1, 1.0, x + 0.5, -0.99, z + 0.5);
 
         porte.caseX = x;
         porte.caseZ = z;
@@ -106,6 +121,45 @@ function demarrer() {
   demarrerNiveau(1);
 
   requestAnimationFrame(bouclePrincipale);
+}
+
+function creerTextures(objgl, tabImages) {
+  return new Promise(function (resolve) {
+    var tabTextures = [];
+    var nbChargees = 0;
+
+    for (let i = 0; i < tabImages.length; i++) {
+      let image = new Image();
+
+      image.onload = function () {
+        var texture = objgl.createTexture();
+        objgl.bindTexture(objgl.TEXTURE_2D, texture);
+
+        objgl.texImage2D(
+          objgl.TEXTURE_2D,
+          0,
+          objgl.RGBA,
+          objgl.RGBA,
+          objgl.UNSIGNED_BYTE,
+          image
+        );
+
+        objgl.texParameteri(objgl.TEXTURE_2D, objgl.TEXTURE_MAG_FILTER, objgl.LINEAR);
+        objgl.texParameteri(objgl.TEXTURE_2D, objgl.TEXTURE_MIN_FILTER, objgl.LINEAR);
+        objgl.texParameteri(objgl.TEXTURE_2D, objgl.TEXTURE_WRAP_S, objgl.REPEAT);
+        objgl.texParameteri(objgl.TEXTURE_2D, objgl.TEXTURE_WRAP_T, objgl.REPEAT);
+
+        tabTextures[i] = texture;
+        nbChargees++;
+
+        if (nbChargees === tabImages.length) {
+          resolve(tabTextures);
+        }
+      };
+
+      image.src = tabImages[i];
+    }
+  });
 }
 
 // array 31x31 qui represente la carte de murs, vides, murs ouvrables et salle de spawn

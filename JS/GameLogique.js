@@ -12,16 +12,31 @@ var nbTeleporteursParNiveau = [0, 1, 1, 2, 2, 3, 3, 4, 4, 5];
 var nbReceveursParNiveau = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function collisionMur(x, z) {
-  var col = Math.floor(x);
-  var lig = Math.floor(z);
+  var rayon = 0.03;
 
-  if (lig < 0 || lig >= tabCarte.length || col < 0 || col >= tabCarte[0].length) {
-    return true;
+  var points = [
+    [x - rayon, z - rayon],
+    [x + rayon, z - rayon],
+    [x - rayon, z + rayon],
+    [x + rayon, z + rayon]
+  ];
+
+  for (var i = 0; i < points.length; i++) {
+    var col = Math.floor(points[i][0]);
+    var lig = Math.floor(points[i][1]);
+
+    if (lig < 0 || lig >= tabCarte.length || col < 0 || col >= tabCarte[0].length) {
+      return true;
+    }
+
+    var caseCarte = tabCarte[lig][col];
+
+    if (caseCarte === "M" || caseCarte === "O" || caseCarte === "X") {
+      return true;
+    }
   }
 
-  var caseCarte = tabCarte[lig][col];
-
-  return caseCarte === "M" || caseCarte === "O" || caseCarte === "X";
+  return false;
 }
 
 function verifierCollisionCoffre() {
@@ -276,26 +291,27 @@ function placerObjetsAleatoiresPourNiveau(noNiveau) {
 
   // Coffre
   var pos = tirerCase(casesLibres);
-  objCoffre = creerCoffre(gl, pos.x + 0.5, 0.45, pos.z + 0.5);
-  console.log("Niveau", noNiveau, "- Coffre →", pos.x, pos.z);
+  objCoffre = creerCoffre(gl, 7, 1.0, pos.x + 0.5, 0.2, pos.z + 0.5);
 
   var coffreCaseX = pos.x;
   var coffreCaseZ = pos.z;
 
-  // Télé-transporteurs
+  // Téléporteurs
   for (var i = 0; i < nbTeleporteursParNiveau[indexNiveau]; i++) {
     pos = tirerCase(casesLibres);
-    console.log("Niveau", noNiveau, "- TeleTransporteur", i, "→", pos.x, pos.z);
 
-    tabTeleporteurs.push(creerTeleTransporteur(gl, pos.x + 0.5, 1.0, pos.z + 0.5));
+    tabTeleporteurs.push(
+      creerTeleTransporteur(gl, 5, 1.0, pos.x + 0.5, 1.0, pos.z + 0.5)
+    );
   }
 
-  // Télé-récepteurs
+  // Récepteurs
   for (var i = 0; i < nbReceveursParNiveau[indexNiveau]; i++) {
     pos = tirerCase(casesLibres);
-    console.log("Niveau", noNiveau, "- TeleReceveur", i, "→", pos.x, pos.z);
 
-    tabReceveurs.push(creerTeleReceveur(gl, pos.x + 0.5, 1.0, pos.z + 0.5));
+    tabReceveurs.push(
+      creerTeleReceveur(gl, 6, 1.0, pos.x + 0.5, 1.0, pos.z + 0.5)
+    );
   }
 
   // Flèches
@@ -304,9 +320,9 @@ function placerObjetsAleatoiresPourNiveau(noNiveau) {
 
     var angleFleche = getAngleVersCoffre(pos.x, pos.z, coffreCaseX, coffreCaseZ);
 
-    tabFleches.push(creerFleche(gl, pos.x + 0.5, 1.3, pos.z + 0.5, angleFleche));
-
-    console.log("Niveau", noNiveau, "- Fleche", i, "→", pos.x, pos.z, "| angle:", angleFleche.toFixed(2));
+    tabFleches.push(
+      creerFleche(gl, pos.x + 0.5, 1.3, pos.z + 0.5, angleFleche)
+    );
   }
 }
 
