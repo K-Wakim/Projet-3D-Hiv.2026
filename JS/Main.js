@@ -258,12 +258,5 @@ function bouclePrincipale() {
   dessineBGHUD(ctx, hudCanvas);
   dessineHUD(ctx, hudCanvas, score, tempsRestant, nbOuvreurs, niveauActuel);
 
-  if (jeuTermine) {
-    if (jeuGagne) {
-      dessineVictoire(ctx, hudCanvas);
-    } else {
-      dessineGameOver(ctx, hudCanvas);
-    }
-  }
   requestAnimationFrame(bouclePrincipale);
 }
