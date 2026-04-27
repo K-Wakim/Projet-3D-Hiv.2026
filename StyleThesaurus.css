@@ -1,63 +1,82 @@
-﻿BODY {
-  font-family: arial;
-  font-size: 10pt;
-  color: black;
+﻿body {
+  margin: 0;
+  background: radial-gradient(circle at top, #3a0d00, #120400 70%);
+  color: white;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.sTexteCentre {
+
+/* En-tête */
+#enteteJeu {
   text-align: center;
-}
-.sLargeurDiv {
-  width: 640px;
-  padding-left: 10px;
-  padding-right: 10px;
+  margin-top: 15px;
+  margin-bottom: 10px;
 }
 
-.sEntete {
-  margin-bottom: 5px;
-  border-bottom-width: 2px;
-  border-bottom-style: solid;
+#enteteJeu h1 {
+  margin: 0;
+  font-size: 42px;
+  color: #ffb000;
+  text-shadow: 0 0 10px #ff4500;
 }
-.sCorps {
-}
-.sPiedDePage {
-  margin-top: 5px;
-  border-top-width: 2px;
-  border-top-style: solid;
-}
-.sTitreApp {
-  font-size: 150%;
-  font-weight: bold;
-  text-decoration: underline;
-}
-.sAuteurApp {
-  font-variant: small-caps;
+
+#enteteJeu p {
+  margin: 4px 0 0 0;
+  font-size: 16px;
+  color: #ffd27a;
   font-style: italic;
-  font-weight: bold;
 }
 
-A:link IMG,
-A:visited IMG {
-  border: none;
-}
-A:hover IMG {
-  border-style: double;
-  border-width: 2px;
-  border-color: Green;
-}
-
+/* Zone du jeu */
 #gameContainer {
   position: relative;
-  width: 800px;
-  height: 600px;
+  width: 1400px;
+  height: 920px;
+  background-color: black;
+  border: 4px solid #ff7a00;
+  box-shadow: 0 0 30px #ff3300;
 }
 
-#monCanvas,
+#monCanvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1400px;
+  height: 920px;
+}
+
 #hudCanvas {
   position: absolute;
-  top: 0;
   left: 0;
+  top: 0;
+  width: 1400px;
+  height: 920px;
+  pointer-events: none;
 }
 
-#hudCanvas {
-  pointer-events: none; /* optional: lets clicks go through */
+/* Boutons triche */
+#cheats {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+}
+
+#cheats button {
+  background: #ff7a00;
+  color: black;
+  border: 2px solid #ffd27a;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 6px 12px;
+  margin-left: 6px;
+  cursor: pointer;
+}
+
+#cheats button:hover {
+  background: #ffd000;
 }

@@ -15,7 +15,7 @@
     <script src="JS/glMatrix-0.9.5.min.js"></script>
     <script src="JS/Camera.js"></script>
 
-    <!-- Ton code -->
+    <!-- Code du jeu -->
     <script src="JS/Objets.js"></script>
     <script src="JS/CameraControle.js"></script>
     <script src="JS/Hud.js"></script>
@@ -24,23 +24,28 @@
   </head>
 
   <body onload="demarrer()">
-    <header class="sTexteCentre sLargeurDiv sEntete">
-      <p>
-        <span class="sTitreApp"> Thesaurus<br /> </span> par
-        <span class="sAuteurApp"> Samuel Filteau-Hubert, Kamal Wakim et Abel Aimé Moussy Minyogok</span>
-      </p>
+
+    <header id="enteteJeu">
+      <h1>Thesaurus</h1>
+      <p>Samuel Filteau-Hubert, Kamal Wakim et Abel Aimé Moussy Minyogok</p>
     </header>
 
-    <!-- Conteneur pour superposer les canvas-->
     <div id="gameContainer">
-      <!-- Canvas -->
-      <canvas id="monCanvas" width="800" height="600"> Votre navigateur ne supporte pas la balise canvas </canvas>
-      <!-- Canvas pour le HUD -->
-      <canvas id="hudCanvas" width="800" height="650"> Votre navigateur ne supporte pas la balise canvas </canvas>
+
+      <canvas id="monCanvas" width="1400" height="920">
+        Votre navigateur ne supporte pas la balise canvas
+      </canvas>
+
+      <canvas id="hudCanvas" width="1400" height="920">
+        Votre navigateur ne supporte pas la balise canvas
+      </canvas>
+
       <div id="cheats">
         <button onclick="tricheNiveauSuivant()">N</button>
         <button onclick="togglePause()">P</button>
       </div>
+
     </div>
+
   </body>
 </html>
