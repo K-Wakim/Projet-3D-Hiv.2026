@@ -12,7 +12,7 @@ var nbTeleporteursParNiveau = [0, 1, 1, 2, 2, 3, 3, 4, 4, 5];
 var nbReceveursParNiveau = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function collisionMur(x, z) {
-  var rayon = 0.03;
+  var rayon = 0.03 ;
 
   var points = [
     [x - rayon, z - rayon],
