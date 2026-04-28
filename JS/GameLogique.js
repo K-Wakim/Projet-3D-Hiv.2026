@@ -383,6 +383,7 @@ function resetTimer() {
 
 function mettreAJourTimer() {
   if (jeuTermine) {
+    niveauActuel += 1;
     return;
   }
 
@@ -415,8 +416,6 @@ function mettreAJourTimer() {
 }
 
 function recommencerNiveau() {
-  ajouterScore(-200);
-
   if (score < 0) {
     score = 0;
   }
@@ -427,6 +426,8 @@ function recommencerNiveau() {
     jeuTermine = true;
     return;
   }
+
+  ajouterScore(-200);
 
   replacerCameraAuSpawn();
   reinitialiserEtatCarteEtObjetsFixes();
