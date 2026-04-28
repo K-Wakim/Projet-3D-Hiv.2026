@@ -72,7 +72,7 @@ async function demarrer() {
   initialiserCamera();
   gererClavierCamera(gl);
   initialiserControlesJeu();
-  initialiserScore();
+  initialiserScore(score);
 
   objPlancher = creerPlancher(gl);
   objCiel = creerCiel(gl);

@@ -1,5 +1,5 @@
 // Contient la logique du jeu, collision, ouverture de mur, détection du trésor, passage au prochain niveau, téléportation, placement des flèches, timer, score, reset niveau, game over/win, etc...
-var TEMPS_NIVEAU = 60;
+var TEMPS_NIVEAU = 5;
 var tempsRestant = TEMPS_NIVEAU;
 var dernierTemps = 0;
 var timerActif = false;
@@ -428,7 +428,7 @@ function recommencerNiveau() {
   }
 
   ajouterScore(-200);
-
+  jouerSon("niveau");
   replacerCameraAuSpawn();
   reinitialiserEtatCarteEtObjetsFixes();
 
@@ -437,8 +437,7 @@ function recommencerNiveau() {
   resetTimer();
 }
 
-function initialiserScore() {
-  score = 300;
+function initialiserScore(score) {
   jeuTermine = false;
   jeuGagne = false;
 
