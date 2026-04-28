@@ -1,9 +1,12 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Thesaurus par Abel Aimé Moussy Minyogok, Kamal Wakim et Samuel Filteau-Hubert</title>
+    <title>
+      Thesaurus par Abel Aimé Moussy Minyogok, Kamal Wakim et Samuel
+      Filteau-Hubert
+    </title>
 
     <link rel="stylesheet" type="text/css" href="StyleThesaurus.css" />
     <link rel="icon" href="data:," />
@@ -16,6 +19,7 @@
     <script src="JS/Camera.js"></script>
 
     <!-- Code du jeu -->
+    <script src="JS/Sons.js"></script>
     <script src="JS/Objets.js"></script>
     <script src="JS/CameraControle.js"></script>
     <script src="JS/Hud.js"></script>
@@ -24,14 +28,12 @@
   </head>
 
   <body onload="demarrer()">
-
     <header id="enteteJeu">
       <h1>Thesaurus</h1>
       <p>Samuel Filteau-Hubert, Kamal Wakim et Abel Aimé Moussy Minyogok</p>
     </header>
 
     <div id="gameContainer">
-
       <canvas id="monCanvas" width="1400" height="920">
         Votre navigateur ne supporte pas la balise canvas
       </canvas>
@@ -44,8 +46,6 @@
         <button onclick="tricheNiveauSuivant()">N</button>
         <button onclick="togglePause()">P</button>
       </div>
-
     </div>
-
   </body>
 </html>

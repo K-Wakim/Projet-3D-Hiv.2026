@@ -13,7 +13,7 @@ var niveauActuel = 1;
 var nbOuvreurs = 4;
 var score = 300;
 var jeuTermine = false;
-var jeuGagne = false
+var jeuGagne = false;
 var jeuEnPause = false;
 var objPlancher = null;
 var objCiel = null;
@@ -42,33 +42,6 @@ var tabImages = [
   "Assets/Images/Coffre.png",
 ];
 
-// Sons
-var sons = {};
-
-function chargerSons() {
-  sons.niveau = new Audio("Assets/Sons/recommencer un niveau.wav");
-  sons.tresor = new Audio("Assets/Sons/Trouver trésor.wav");
-  sons.temps0 = new Audio("Assets/Sons/temps zero.wav");
-  sons.mur = new Audio("Assets/Sons/ouverture-mur.wav");
-  sons.teleport = new Audio("Assets/Sons/tele-transportation.wav");
-  sons.gameover = new Audio("Assets/Sons/Debut chaque niveau.wav");
-  sons.victoire = new Audio("Assets/Sons/franchi les 10 niveaux.wav");
-
-  for (var nom in sons) {
-    sons[nom].preload = "auto";
-    sons[nom].volume = 0.7;
-  }
-}
-
-function jouerSon(nom) {
-  if (!sons[nom]) return;
-
-  sons[nom].pause();
-  sons[nom].currentTime = 0;
-  sons[nom].play();
-}
-
-
 async function demarrer() {
   chargerSons();
 
@@ -85,7 +58,13 @@ async function demarrer() {
   gl.viewport(0, 0, canvas.width, canvas.height);
 
   matProjectionPerspective = mat4.create();
-mat4.perspective(45, canvas.width / canvas.height, 0.02, 100.0, matProjectionPerspective);
+  mat4.perspective(
+    45,
+    canvas.width / canvas.height,
+    0.02,
+    100.0,
+    matProjectionPerspective
+  );
   matProjectionOrtho = mat4.create();
   mat4.ortho(-17, 17, -17, 17, 0.1, 100.0, matProjectionOrtho);
 
@@ -95,7 +74,6 @@ mat4.perspective(45, canvas.width / canvas.height, 0.02, 100.0, matProjectionPer
   gererClavierCamera();
   initialiserControlesJeu();
   initialiserScore();
-
 
   objPlancher = creerPlancher(gl);
   objCiel = creerCiel(gl);
@@ -123,11 +101,13 @@ mat4.perspective(45, canvas.width / canvas.height, 0.02, 100.0, matProjectionPer
       }
 
       if (tabCarte[z][x] === "M") {
-        tabMursNonOuvrables.push(creerMurNonOuvrable(gl, 1, 1.0, x + 0.5, 0.5, z + 0.5));
+        tabMursNonOuvrables.push(
+          creerMurNonOuvrable(gl, 1, 1.0, x + 0.5, 0.5, z + 0.5)
+        );
       }
 
       if (tabCarte[z][x] === "S") {
-        tabSolsSpawn.push(creerSolSpawn(gl,3, 1.0, x, z));
+        tabSolsSpawn.push(creerSolSpawn(gl, 3, 1.0, x, z));
       }
 
       if (tabCarte[z][x] === "X") {
@@ -172,10 +152,26 @@ function creerTextures(objgl, tabImages) {
           image
         );
 
-        objgl.texParameteri(objgl.TEXTURE_2D, objgl.TEXTURE_MAG_FILTER, objgl.LINEAR);
-        objgl.texParameteri(objgl.TEXTURE_2D, objgl.TEXTURE_MIN_FILTER, objgl.LINEAR);
-        objgl.texParameteri(objgl.TEXTURE_2D, objgl.TEXTURE_WRAP_S, objgl.REPEAT);
-        objgl.texParameteri(objgl.TEXTURE_2D, objgl.TEXTURE_WRAP_T, objgl.REPEAT);
+        objgl.texParameteri(
+          objgl.TEXTURE_2D,
+          objgl.TEXTURE_MAG_FILTER,
+          objgl.LINEAR
+        );
+        objgl.texParameteri(
+          objgl.TEXTURE_2D,
+          objgl.TEXTURE_MIN_FILTER,
+          objgl.LINEAR
+        );
+        objgl.texParameteri(
+          objgl.TEXTURE_2D,
+          objgl.TEXTURE_WRAP_S,
+          objgl.REPEAT
+        );
+        objgl.texParameteri(
+          objgl.TEXTURE_2D,
+          objgl.TEXTURE_WRAP_T,
+          objgl.REPEAT
+        );
 
         tabTextures[i] = texture;
         nbChargees++;
@@ -201,6 +197,7 @@ function creerTextures(objgl, tabImages) {
 // T = trésor
 // X = mur non ouvrable qui se referme quand le joueur sort de la salle de spawn
 
+// prettier-ignore
 var tabCarte = [
   ["M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M"],
   ["M", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "O", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "M"],
