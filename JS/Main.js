@@ -51,7 +51,6 @@ async function demarrer() {
   tabObjTextures = await creerTextures(gl, tabImages);
   hudCanvas = document.getElementById("hudCanvas");
   ctx = hudCanvas.getContext("2d");
-  console.log(`ctx: ${ctx}`);
 
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   gl.enable(gl.DEPTH_TEST);

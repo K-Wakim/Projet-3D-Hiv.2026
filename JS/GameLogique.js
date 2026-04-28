@@ -12,20 +12,25 @@ var nbTeleporteursParNiveau = [0, 1, 1, 2, 2, 3, 3, 4, 4, 5];
 var nbReceveursParNiveau = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function collisionMur(x, z) {
-  var rayon = 0.03 ;
+  var rayon = 0.03;
 
   var points = [
     [x - rayon, z - rayon],
     [x + rayon, z - rayon],
     [x - rayon, z + rayon],
-    [x + rayon, z + rayon]
+    [x + rayon, z + rayon],
   ];
 
   for (var i = 0; i < points.length; i++) {
     var col = Math.floor(points[i][0]);
     var lig = Math.floor(points[i][1]);
 
-    if (lig < 0 || lig >= tabCarte.length || col < 0 || col >= tabCarte[0].length) {
+    if (
+      lig < 0 ||
+      lig >= tabCarte.length ||
+      col < 0 ||
+      col >= tabCarte[0].length
+    ) {
       return true;
     }
 
@@ -54,8 +59,6 @@ function verifierCollisionCoffre() {
   var distanceZ = Math.abs(zCam - zCoffre);
 
   if (distanceX < 0.4 && distanceZ < 0.4) {
-    console.log("Coffre trouvé !");
-
     var bonus = Math.floor(tempsRestant) * 10;
     ajouterScore(bonus);
 
@@ -95,7 +98,6 @@ function verifierTeleportation() {
       mettreAJourCibleCamera();
       synchroniserCamera();
 
-      console.log("Téléportation vers :", Math.floor(xR), Math.floor(zR));
       return;
     }
   }
@@ -151,7 +153,6 @@ function getCasesDevantCamera() {
 
 function tenterOuvrirMurDevantCamera() {
   if (!peutUtiliserOuvreur()) {
-    console.log("Impossible d'utiliser un ouvreur");
     return;
   }
 
@@ -172,24 +173,24 @@ function tenterOuvrirMurDevantCamera() {
     for (var i = 0; i < tabMursOuvrables.length; i++) {
       var mur = tabMursOuvrables[i];
 
-      if (mur.caseX === x && mur.caseZ === z && !mur.binEnOuverture && !mur.binOuvert) {
+      if (
+        mur.caseX === x &&
+        mur.caseZ === z &&
+        !mur.binEnOuverture &&
+        !mur.binOuvert
+      ) {
         mur.binEnOuverture = true;
 
-          jouerSon("mur");
-
+        jouerSon("mur");
 
         if (!jeuEnPause) {
           nbOuvreurs--;
           ajouterScore(-50);
         }
-
-        console.log("Ouverture du mur :", x, z, "| Ouvreurs restants :", nbOuvreurs);
         return;
       }
     }
   }
-
-  console.log("Aucun mur ouvrable devant la caméra");
 }
 
 function animerMursOuvrables() {
@@ -224,7 +225,7 @@ function verifierSortieSpawn() {
 
       if (!porte.binEnFermeture && !porte.binFermee) {
         porte.binEnFermeture = true;
-        console.log("Fermeture de la porte du spawn");
+        jouerSon("mur");
       }
     }
   }
@@ -234,7 +235,12 @@ function joueurEstEncoreDansSpawn() {
   var caseX = Math.floor(posCam[0]);
   var caseZ = Math.floor(posCam[2]);
 
-  if (caseZ < 0 || caseZ >= tabCarte.length || caseX < 0 || caseX >= tabCarte[0].length) {
+  if (
+    caseZ < 0 ||
+    caseZ >= tabCarte.length ||
+    caseX < 0 ||
+    caseX >= tabCarte[0].length
+  ) {
     return false;
   }
 
@@ -253,7 +259,6 @@ function animerPortesSpawn() {
         y = 0.5;
         porte.binEnFermeture = false;
         porte.binFermee = true;
-        console.log("Porte fermée");
       }
 
       setPositionY(y, porte.transformations);
@@ -325,7 +330,12 @@ function placerObjetsAleatoiresPourNiveau(noNiveau) {
   for (var i = 0; i < nbFlechesParNiveau[indexNiveau]; i++) {
     pos = tirerCase(casesLibres);
 
-    var angleFleche = getAngleVersCoffre(pos.x, pos.z, coffreCaseX, coffreCaseZ);
+    var angleFleche = getAngleVersCoffre(
+      pos.x,
+      pos.z,
+      coffreCaseX,
+      coffreCaseZ
+    );
 
     tabFleches.push(
       creerFleche(gl, pos.x + 0.5, 1.3, pos.z + 0.5, angleFleche)
@@ -393,7 +403,6 @@ function mettreAJourTimer() {
   tempsRestant -= delta;
 
   if (tempsRestant <= 0) {
-    console.log("Temps écoulé !");
     tempsRestant = 0;
 
     jouerSon("temps0");
@@ -402,7 +411,6 @@ function mettreAJourTimer() {
   }
 
   if (Math.floor(tempsRestant) !== Math.floor(tempsRestant + delta)) {
-    console.log("Temps:", Math.floor(tempsRestant));
   }
 }
 
@@ -414,13 +422,11 @@ function recommencerNiveau() {
   }
 
   if (score < 200) {
-      jouerSon("gameover");
+    jouerSon("gameover");
 
     jeuTermine = true;
     return;
   }
-
-  console.log("Recommencer niveau", niveauActuel);
 
   replacerCameraAuSpawn();
   reinitialiserEtatCarteEtObjetsFixes();
@@ -437,13 +443,10 @@ function initialiserScore() {
 
   tempsVueAerienneAccumule = 0;
   dernierTempsVueAerienne = Date.now();
-
-  console.log("Score initial :", score);
 }
 
 function ajouterScore(points) {
   score += points;
-  console.log("Score :", score, "(" + (points >= 0 ? "+" : "") + points + ")");
 }
 
 function peutUtiliserOuvreur() {
@@ -457,7 +460,6 @@ function peutUtiliserVueAerienne() {
 function verifierGameOverRecommencer() {
   if (score < 200) {
     jeuTermine = true;
-    console.log("GAME OVER");
     return true;
   }
   return false;
@@ -489,7 +491,6 @@ function mettreAJourScoreVueAerienne() {
     }
 
     if (score < 10) {
-      console.log("Score trop bas pour la vue aérienne");
       desactiverVueAerienne();
       break;
     }
@@ -499,9 +500,7 @@ function mettreAJourScoreVueAerienne() {
 function demarrerNiveau(noNiveau) {
   niveauActuel = noNiveau;
 
-    jouerSon("niveau");
-
-  console.log("===== NIVEAU " + niveauActuel + " =====");
+  jouerSon("niveau");
 
   replacerCameraAuSpawn();
   reinitialiserEtatCarteEtObjetsFixes();
@@ -513,8 +512,7 @@ function passerAuNiveauSuivant() {
   if (niveauActuel < 10) {
     demarrerNiveau(niveauActuel + 1);
   } else {
-    console.log("VICTOIRE !");
-      jouerSon("victoire");
+    jouerSon("victoire");
     jeuTermine = true;
     jeuGagne = true;
     objCoffre = null;
@@ -536,7 +534,10 @@ function mettreAJourTriangleCamera() {
   objDisqueCamera.transformations[1] = 1.51;
   objDisqueCamera.transformations[2] = posCamSauvegarde[2];
 
-  setAngleY((-angleCameraSauvegarde * 180) / Math.PI + 90, objDisqueCamera.transformations);
+  setAngleY(
+    (-angleCameraSauvegarde * 180) / Math.PI + 90,
+    objDisqueCamera.transformations
+  );
 }
 
 function tricheNiveauSuivant() {
@@ -554,6 +555,4 @@ function togglePause() {
     dernierTemps = Date.now();
     dernierTempsVueAerienne = Date.now();
   }
-
-  console.log(jeuEnPause ? "Pause activée" : "Pause désactivée");
 }

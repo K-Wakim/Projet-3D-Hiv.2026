@@ -49,7 +49,6 @@ function synchroniserCamera() {
 
 function activerVueAerienne(triche) {
   if (!peutUtiliserVueAerienne()) {
-    console.log("Score trop bas pour activer la vue aérienne");
     return;
   }
 
@@ -151,7 +150,6 @@ function mettreAJourCamera() {
   if ((touches["ArrowUp"] || touches["ArrowDown"]) && !timerActif) {
     timerActif = true;
     dernierTemps = Date.now();
-    console.log("Timer démarré");
   }
 
   if (!collisionMur(nouveauX, nouveauZ)) {
@@ -161,7 +159,6 @@ function mettreAJourCamera() {
 
   var col = Math.floor(posCam[0]);
   var lig = Math.floor(posCam[2]);
-  console.log(`Camera → X: ${col} | Z: ${lig}`);
 
   mettreAJourCibleCamera();
   synchroniserCamera();
