@@ -9,6 +9,8 @@ function chargerSons() {
   sons.teleport = new Audio("Assets/Sons/tele-transportation.wav");
   sons.gameover = new Audio("Assets/Sons/Debut chaque niveau.wav");
   sons.victoire = new Audio("Assets/Sons/franchi les 10 niveaux.wav");
+  sons.bg = new Audio("Assets/Sons/Voicy_Minecraft Lava SFX.mp3");
+  sons.bg.loop = true;
 
   for (var nom in sons) {
     sons[nom].preload = "auto";

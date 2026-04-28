@@ -126,7 +126,7 @@ async function demarrer() {
   }
 
   demarrerNiveau(1);
-
+  jouerSon("bg");
   requestAnimationFrame(bouclePrincipale);
 }
 

@@ -1,5 +1,5 @@
 // Contient la logique du jeu, collision, ouverture de mur, détection du trésor, passage au prochain niveau, téléportation, placement des flèches, timer, score, reset niveau, game over/win, etc...
-var TEMPS_NIVEAU = 5;
+var TEMPS_NIVEAU = 60;
 var tempsRestant = TEMPS_NIVEAU;
 var dernierTemps = 0;
 var timerActif = false;
@@ -499,8 +499,6 @@ function mettreAJourScoreVueAerienne() {
 
 function demarrerNiveau(noNiveau) {
   niveauActuel = noNiveau;
-
-  jouerSon("niveau");
 
   replacerCameraAuSpawn();
   reinitialiserEtatCarteEtObjetsFixes();
