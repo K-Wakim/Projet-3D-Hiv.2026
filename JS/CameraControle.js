@@ -47,7 +47,7 @@ function synchroniserCamera() {
   setOrientationZ(upCam[2], camera);
 }
 
-function activerVueAerienne(triche) {
+function activerVueAerienne(triche, objgl) {
   if (!peutUtiliserVueAerienne()) {
     return;
   }
@@ -66,8 +66,8 @@ function activerVueAerienne(triche) {
   modeVueAerienneTriche = triche;
 
   // caméra au-dessus du centre de la map
-  posCam = [15.5, 40.0, 15.5];
-  tgtCam = [15.5, 0.0, 15.5];
+  posCam = [15.5, 40.0, 16.5];
+  tgtCam = [15.5, 0.0, 16.5];
   upCam = [0, 0, -1];
 
   synchroniserCamera();
@@ -89,13 +89,13 @@ function desactiverVueAerienne() {
   synchroniserCamera();
 }
 
-function gererClavierCamera() {
+function gererClavierCamera(objgl) {
   document.addEventListener("keydown", function (e) {
     touches[e.key] = true;
 
     if (e.code === "PageUp") {
       e.preventDefault();
-      activerVueAerienne(false);
+      activerVueAerienne(false, objgl);
     }
 
     if (e.code === "PageDown") {

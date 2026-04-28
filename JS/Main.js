@@ -70,7 +70,7 @@ async function demarrer() {
   gl.uniformMatrix4fv(prog.matProjection, false, matProjectionPerspective);
 
   initialiserCamera();
-  gererClavierCamera();
+  gererClavierCamera(gl);
   initialiserControlesJeu();
   initialiserScore();
 
@@ -258,7 +258,7 @@ function bouclePrincipale() {
     verifierSortieSpawn();
     animerMursOuvrables();
     animerPortesSpawn();
-  } else if (modeVueAerienneTriche) {
+  } else if (modeVueAerienne) {
     mettreAJourTriangleCamera();
   }
 
@@ -271,6 +271,7 @@ function bouclePrincipale() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   dessinerObjet(gl, prog, objPlancher);
+  dessinerObjet(gl, prog, objDisqueCamera);
 
   if (!modeVueAerienne) {
     dessinerObjet(gl, prog, objCiel);
@@ -328,8 +329,6 @@ function bouclePrincipale() {
     for (var i = 0; i < tabFleches.length; i++) {
       dessinerObjet(gl, prog, tabFleches[i]);
     }
-
-    dessinerObjet(gl, prog, objDisqueCamera);
   }
 
   clearHUD(ctx, hudCanvas);
