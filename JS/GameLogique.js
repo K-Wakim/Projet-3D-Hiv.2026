@@ -59,6 +59,8 @@ function verifierCollisionCoffre() {
     var bonus = Math.floor(tempsRestant) * 10;
     ajouterScore(bonus);
 
+    jouerSon("tresor");
+
     passerAuNiveauSuivant();
   }
 }
@@ -82,6 +84,8 @@ function verifierTeleportation() {
 
       var xR = getPositionX(receveur.transformations);
       var zR = getPositionZ(receveur.transformations);
+
+      jouerSon("teleport");
 
       // téléporter la caméra au centre du télé-réceveur
       posCam[0] = xR;
@@ -170,6 +174,9 @@ function tenterOuvrirMurDevantCamera() {
 
       if (mur.caseX === x && mur.caseZ === z && !mur.binEnOuverture && !mur.binOuvert) {
         mur.binEnOuverture = true;
+
+          jouerSon("mur");
+
 
         if (!jeuEnPause) {
           nbOuvreurs--;
@@ -388,6 +395,9 @@ function mettreAJourTimer() {
   if (tempsRestant <= 0) {
     console.log("Temps écoulé !");
     tempsRestant = 0;
+
+    jouerSon("temps0");
+
     recommencerNiveau();
   }
 
@@ -404,6 +414,8 @@ function recommencerNiveau() {
   }
 
   if (score < 200) {
+      jouerSon("gameover");
+
     jeuTermine = true;
     return;
   }
@@ -487,6 +499,8 @@ function mettreAJourScoreVueAerienne() {
 function demarrerNiveau(noNiveau) {
   niveauActuel = noNiveau;
 
+    jouerSon("niveau");
+
   console.log("===== NIVEAU " + niveauActuel + " =====");
 
   replacerCameraAuSpawn();
@@ -500,6 +514,7 @@ function passerAuNiveauSuivant() {
     demarrerNiveau(niveauActuel + 1);
   } else {
     console.log("VICTOIRE !");
+      jouerSon("victoire");
     jeuTermine = true;
     jeuGagne = true;
     objCoffre = null;
